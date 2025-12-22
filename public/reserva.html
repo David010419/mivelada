@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reserva Premium | Mi Velada</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
-        /* ==========================================
-           FUSIÓN DE ESTILO PREMIUM Y ESTRUCTURA GRID
-           ========================================== */
         :root {
             --dorado: #c5a059;
             --mate: #121212;
@@ -21,7 +18,8 @@
             --borde: #333;
         }
 
-        * { box-sizing: border-box; }
+        /* RESET PARA ALINEACIÓN PERFECTA */
+        * { box-sizing: border-box !important; }
 
         body {
             background-color: var(--mate);
@@ -30,55 +28,40 @@
             margin: 0;
             overflow-x: hidden;
         }
-.logo-img {
-    height: 200px; /* Ajusta la altura según tu diseño */
-    width: auto;  /* Mantiene la proporción */
-    display: block;
-    transition: transform 0.3s ease;
-}
 
-.logo-img:hover {
-    transform: scale(1.05); /* Un pequeño efecto visual elegante al pasar el ratón */
-}
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+        }
 
-/* Ajuste de la Navbar para alinear el logo verticalmente */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 5%;
-    position: absolute;
-    width: 100%;
-    z-index: 10;
-}
+        .logo-img { height: 80px; transition: transform 0.3s ease; }
+        .logo-img:hover { transform: scale(1.05); }
 
-/* Botones */
-.btn-main {
-    padding: 15px 40px;
-    background-color: var(--dorado);
-    color: white;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: 0.3s;
-}
-    
-        /* --- CONTENEDOR PRINCIPAL --- */
+        .btn-main {
+            padding: 12px 25px;
+            background-color: var(--dorado);
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+
         .booking-page { padding: 140px 5% 60px; min-height: 100vh; }
         .container-small { max-width: 800px; margin: 0 auto; }
 
-        .playfair { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 3rem; 
-            text-align: center; 
-            margin-bottom: 10px;
-            color: var(--blanco);
-        }
+        .playfair { font-family: 'Playfair Display', serif; font-size: 3rem; text-align: center; margin-bottom: 10px; }
         .subtitle { text-align: center; color: #888; margin-bottom: 50px; }
 
-        /* --- ESTRUCTURA DE FORMULARIO (GRID PARA SIMETRÍA) --- */
+        /* ESTRUCTURA GRID */
         .form-section { margin-bottom: 50px; }
-        
         .section-label { 
             display: block; font-weight: 600; font-size: 1.1rem; 
             margin-bottom: 25px; color: var(--dorado); 
@@ -88,22 +71,14 @@
 
         .input-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Mitad y mitad exacto */
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 20px;
-            align-items: end;
+            width: 100%;
         }
 
         .field-group { display: flex; flex-direction: column; width: 100%; }
-        
-        .field-label { 
-            font-size: 0.75rem; 
-            color: var(--dorado); 
-            margin-bottom: 8px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            height: 15px; /* Altura fija para alinear los inputs */
-        }
+        .field-label { font-size: 0.75rem; color: var(--dorado); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; height: 15px; }
 
         .input-field { 
             background: var(--mate-suave);
@@ -112,19 +87,18 @@
             color: white;
             border-radius: 4px;
             font-size: 1rem;
-            width: 100%;
+            width: 100% !important;
             font-family: inherit;
             transition: 0.3s;
+            height: 55px;
         }
         .input-field:focus { border-color: var(--dorado); outline: none; background: #252525; }
 
-        /* --- TARJETAS (TURNOS Y SUPLEMENTOS) --- */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
+        /* FIX FLATPICKR WIDTH */
+        .flatpickr-wrapper { display: block !important; width: 100% !important; }
 
+        /* TARJETAS */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .option-card {
             background: var(--mate-suave);
             border: 1px solid var(--borde);
@@ -135,65 +109,45 @@
             transition: 0.3s;
             position: relative;
         }
-
         .option-card i { font-size: 2.5rem; color: var(--dorado); margin-bottom: 15px; display: block; }
-        .option-card h3 { font-size: 1rem; margin: 10px 0; color: white; text-transform: uppercase; }
+        .option-card h3 { font-size: 1rem; margin: 10px 0; text-transform: uppercase; }
         .option-card span { font-size: 0.85rem; color: #888; }
         .option-card input { position: absolute; opacity: 0; }
+        .option-card:has(input:checked) { border-color: var(--dorado); background: rgba(197, 160, 89, 0.08); transform: translateY(-5px); }
+        .option-card:has(input:disabled) { opacity: 0.2; cursor: not-allowed; filter: grayscale(1); }
 
-        /* Estados de selección */
-        .option-card:has(input:checked) {
-            border-color: var(--dorado);
-            background: rgba(197, 160, 89, 0.08);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+        /* CUPÓN */
+        .coupon-section { margin-top: 30px; }
+        .coupon-toggle { color: var(--dorado); text-decoration: none; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
 
-        .option-card:has(input:disabled) {
-            opacity: 0.2;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
-
-        /* --- RESUMEN Y BOTÓN --- */
-        .summary-card { 
-            background: #000; 
-            padding: 40px; 
-            border-radius: 8px; 
-            border: 1px solid var(--dorado); 
-            margin-top: 40px;
-        }
-
+        /* RESUMEN */
+        .summary-card { background: #000; padding: 40px; border-radius: 8px; border: 1px solid var(--dorado); margin-top: 40px; }
         .total-line { 
-            font-size: 2.2rem; 
-            color: var(--dorado); 
-            font-family: 'Playfair Display', serif; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            border-top: 1px solid #333; 
-            padding-top: 25px; 
-            margin-top: 20px;
+            font-size: 2.2rem; color: var(--dorado); font-family: 'Playfair Display', serif; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid #333; padding-top: 25px; margin-top: 20px;
         }
-
         .btn-submit {
-            display: block; width: 100%; padding: 22px;
-            background-color: var(--dorado); color: white;
-            border: none; border-radius: 4px; font-weight: 700;
-            font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;
-            cursor: pointer; margin-top: 30px; transition: 0.3s;
+            display: block; width: 100%; padding: 22px; background-color: var(--dorado); color: white;
+            border: none; border-radius: 4px; font-weight: 700; font-size: 1.1rem; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; margin-top: 30px; transition: 0.3s;
         }
-        .btn-submit:hover { background-color: #b08d4a; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
-        /* --- MÓVIL --- */
+        /* COLORES CALENDARIO */
+        .flatpickr-day.dispo-verde { background: #1b5e20 !important; border-color: #1b5e20 !important; color: white !important; opacity: 1 !important; }
+        .flatpickr-day.dispo-amarillo { background: #fbc02d !important; border-color: #fbc02d !important; color: black !important; opacity: 1 !important; }
+        .flatpickr-day.dispo-rojo { background: #b71c1c !important; border-color: #b71c1c !important; color: white !important; opacity: 0.5; pointer-events: none; }
+        .flatpickr-day.nextMonthDay.dispo-verde { opacity: 0.8 !important; }
+
         @media (max-width: 768px) {
-            .playfair { font-size: 2rem; }
+            .playfair { font-size: 1.8rem; }
             .input-grid { grid-template-columns: 1fr; gap: 15px; }
-            .navbar { padding: 10px 5%; background: rgba(18,18,18,0.9); position: fixed; }
+            .navbar { background: rgba(18,18,18,0.95); position: fixed; padding: 10px 5%; }
             .logo-img { height: 50px; }
             .booking-page { padding-top: 100px; }
             .option-card { padding: 20px; display: flex; align-items: center; text-align: left; gap: 20px; }
             .option-card i { margin-bottom: 0; font-size: 1.8rem; min-width: 40px; }
+            .input-field { height: 50px; font-size: 16px; }
         }
     </style>
 </head>
@@ -201,13 +155,13 @@
 
     <nav class="navbar">
         <a href="index.html"><img src="logo.png" alt="Logo" class="logo-img"></a>
-        <a href="index.html" class="btn-main">Volver al inicio</a>
+        <a href="index.html" class="btn-main">Volver</a>
     </nav>
 
     <main class="booking-page">
         <div class="container-small">
             <h1 class="playfair">Reserva Tu Velada</h1>
-            <p class="subtitle">Vive una experiencia inolvidable rodeado de los tuyos</p>
+            <p class="subtitle">Cada detalle cuenta para crear una noche perfecta</p>
 
             <form id="booking-form">
                 
@@ -216,11 +170,11 @@
                     <div class="input-grid">
                         <div class="field-group">
                             <span class="field-label">Nombre</span>
-                            <input type="text" id="nombre" class="input-field" placeholder="Tu nombre" required>
+                            <input type="text" id="nombre" class="input-field" placeholder="Nombre" required>
                         </div>
                         <div class="field-group">
                             <span class="field-label">Apellidos</span>
-                            <input type="text" id="apellidos" class="input-field" placeholder="Tus apellidos" required>
+                            <input type="text" id="apellidos" class="input-field" placeholder="Apellidos" required>
                         </div>
                     </div>
 
@@ -231,11 +185,11 @@
                         </div>
                         <div class="field-group">
                             <span class="field-label">Fecha de nacimiento</span>
-                            <input type="text" id="fechaNacimiento" class="input-field" placeholder="Día / Mes / Año" required readonly>
+                            <input type="text" id="fechaNacimiento" class="input-field" placeholder="Día/Mes/Año" required readonly>
                         </div>
                     </div>
                     
-                    <div class="field-group" style="margin-top: 20px;">
+                    <div class="field-group" style="margin-top: 15px;">
                         <span class="field-label">Correo electrónico</span>
                         <input type="email" id="email" class="input-field" placeholder="ejemplo@correo.com" required>
                     </div>
@@ -243,8 +197,8 @@
 
                 <div class="form-section">
                     <label class="section-label">2. Fecha del Evento</label>
-                    <input type="text" id="fecha-evento" class="input-field" placeholder="Consultando disponibilidad..." required readonly>
-                    <div id="price-badge" style="margin-top: 15px; display: inline-block; padding: 6px 15px; background: #333; color: var(--dorado); border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Selecciona una fecha en el calendario</div>
+                    <input type="text" id="fecha-evento" class="input-field" placeholder="Consultando calendario..." required readonly>
+                    <div id="price-badge" style="margin-top: 15px; display: inline-block; padding: 6px 15px; background: #333; color: var(--dorado); border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Selecciona una fecha disponible</div>
                 </div>
 
                 <div class="form-section">
@@ -256,14 +210,12 @@
                             <h3>Turno Día</h3>
                             <span>10:00h - 17:00h</span>
                         </label>
-
                         <label class="option-card">
                             <input type="radio" name="turno" value="Noche" id="shift-night" disabled>
                             <i class="fas fa-moon"></i>
                             <h3>Turno Noche</h3>
                             <span>19:00h - 02:00h <b>(+200€)</b></span>
                         </label>
-
                         <label class="option-card">
                             <input type="radio" name="turno" value="Día Completo" id="shift-full" disabled>
                             <i class="fas fa-clock"></i>
@@ -296,25 +248,25 @@
                         </label>
                     </div>
                 </div>
-                <div class="coupon-section" style="margin-bottom: 20px;">
-    <a href="javascript:void(0)" onclick="toggleCupon()" style="color: var(--dorado); text-decoration: none; font-size: 0.8rem; font-weight: bold;">+ ¿TIENES UN CUPÓN DE DESCUENTO?</a>
-    
-    <div id="cupon-input-container" style="display: none; margin-top: 15px; gap: 10px;">
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="input-codigo-cupon" class="input-field" placeholder="Escribe tu código" style="padding: 10px;">
-            <button type="button" onclick="validarCupon()" style="background: var(--dorado); border: none; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">APLICAR</button>
-        </div>
-        <div id="cupon-mensaje" style="margin-top: 10px; font-size: 0.8rem;"></div>
-    </div>
-</div>
+
+                <div class="coupon-section">
+                    <a href="javascript:void(0)" onclick="toggleCupon()" class="coupon-toggle">+ ¿Tienes un cupón de descuento?</a>
+                    <div id="cupon-input-container" style="display: none; margin-top: 15px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="input-codigo-cupon" class="input-field" placeholder="Código" style="height: 45px;">
+                            <button type="button" onclick="validarCupon()" style="background: var(--dorado); border: none; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: bold; color: white;">APLICAR</button>
+                        </div>
+                        <div id="cupon-mensaje" style="margin-top: 10px; font-size: 0.8rem;"></div>
+                    </div>
+                </div>
 
                 <div class="summary-card">
-                    <div style="color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px;">Presupuesto Estimado</div>
+                    <div style="color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px;">Resumen de presupuesto</div>
                     <div class="total-line">
                         <span>Total</span>
                         <span id="total-price">0€</span>
                     </div>
-                    <button type="submit" id="btn-submit" class="btn-submit">Enviar Solicitud de Reserva</button>
+                    <button type="submit" id="btn-submit" class="btn-submit">Enviar Solicitud</button>
                 </div>
 
             </form>
@@ -327,60 +279,56 @@
     <script>
         const PRECIO_DIARIO = 800, PRECIO_FINDE = 1200, PLUS_NOCHE = 200, PLUS_COMPLETO = 600;
         let precioBaseDia = 0, precioTurnoExtra = 0, precioAddons = 0, mapaDisponibilidad = {}, calendarInstance;
-        let descuentoMonto = 0;
-let codigoCuponValido = "";
+        let descuentoMonto = 0, codigoCuponValido = "";
 
-function toggleCupon() {
-    const container = document.getElementById('cupon-input-container');
-    container.style.display = container.style.display === 'none' ? 'block' : 'none';
-}
-
-async function validarCupon() {
-    const codigo = document.getElementById('input-codigo-cupon').value;
-    const mensaje = document.getElementById('cupon-mensaje');
-    
-    try {
-        const res = await fetch('/api/validar-cupon', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ codigo })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-            descuentoMonto = data.importe;
-            codigoCuponValido = codigo;
-            mensaje.style.color = "#2ecc71";
-            mensaje.innerText = `¡Éxito! Cupón aplicado de ${descuentoMonto}€`;
-            actualizarTotal();
-        } else {
-            mensaje.style.color = "#e74c3c";
-            mensaje.innerText = data.msg;
+        function toggleCupon() {
+            const container = document.getElementById('cupon-input-container');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
         }
-    } catch (err) {
-        console.error("Error validando cupón");
-    }
-}
+
+        async function validarCupon() {
+            const codigo = document.getElementById('input-codigo-cupon').value;
+            const mensaje = document.getElementById('cupon-mensaje');
+            try {
+                const res = await fetch('/api/validar-cupon', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ codigo })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    descuentoMonto = data.importe;
+                    codigoCuponValido = codigo;
+                    mensaje.style.color = "#2ecc71";
+                    mensaje.innerText = `¡Cupón aplicado: -${descuentoMonto}€!`;
+                    actualizarTotal();
+                } else {
+                    mensaje.style.color = "#e74c3c";
+                    mensaje.innerText = data.msg;
+                }
+            } catch (err) { console.error("Error cupon"); }
+        }
+
         function initCalendar() {
             const today = new Date(); today.setHours(0,0,0,0);
 
-            // 1. Calendario de Eventos
             calendarInstance = flatpickr("#fecha-evento", {
                 minDate: "today", dateFormat: "Y-m-d", locale: "es",
+                disableMobile: "true",
+                onMonthChange: () => setTimeout(() => calendarInstance.redraw(), 10),
                 onDayCreate: (dObj, dStr, fp, dayElem) => {
                     if (dayElem.dateObj < today) return;
-                    const fStr = dayElem.dateObj.getFullYear() + "-" + String(dayElem.dateObj.getMonth() + 1).padStart(2, '0') + "-" + String(dayElem.dateObj.getDate()).padStart(2, '0');
+                    const date = dayElem.dateObj;
+                    const fStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                     const turnos = mapaDisponibilidad[fStr] || [];
                     if (turnos.includes("Día Completo") || turnos.length >= 2) dayElem.classList.add("dispo-rojo");
                     else if (turnos.length === 1) dayElem.classList.add("dispo-amarillo");
-                    else if (Object.keys(mapaDisponibilidad).length > 0) dayElem.classList.add("dispo-verde");
+                    else dayElem.classList.add("dispo-verde");
                 },
                 onChange: (selectedDates, dateStr) => {
                     const esFinde = (selectedDates[0].getDay() === 0 || selectedDates[0].getDay() === 5 || selectedDates[0].getDay() === 6);
                     precioBaseDia = esFinde ? PRECIO_FINDE : PRECIO_DIARIO;
-                    document.getElementById('price-badge').innerText = esFinde ? "Tarifa Fin de Semana Aplicada" : "Tarifa Estándar Aplicada";
-                    
+                    document.getElementById('price-badge').innerText = esFinde ? "Tarifa Fin de Semana" : "Tarifa Estándar";
                     const turnosCogidos = mapaDisponibilidad[dateStr] || [];
                     document.getElementById('shift-day').disabled = turnosCogidos.includes('Día') || turnosCogidos.includes('Día Completo');
                     document.getElementById('shift-night').disabled = turnosCogidos.includes('Noche') || turnosCogidos.includes('Día Completo');
@@ -389,9 +337,11 @@ async function validarCupon() {
                 }
             });
 
-            // 2. Calendario Nacimiento (+21)
             const maxDateNac = new Date(); maxDateNac.setFullYear(maxDateNac.getFullYear() - 21);
-            flatpickr("#fechaNacimiento", { locale: "es", dateFormat: "Y-m-d", maxDate: maxDateNac, defaultDate: maxDateNac });
+            flatpickr("#fechaNacimiento", { 
+                locale: "es", dateFormat: "Y-m-d", maxDate: maxDateNac, defaultDate: maxDateNac, 
+                disableMobile: "true", monthSelectorType: "static", yearSelectorType: "static" 
+            });
 
             cargarDatosDisponibilidad();
         }
@@ -401,7 +351,6 @@ async function validarCupon() {
                 const res = await fetch('/api/reservas/mapa-disponibilidad');
                 mapaDisponibilidad = await res.json();
                 calendarInstance.redraw();
-                document.getElementById('fecha-evento').placeholder = "Selecciona una fecha en el calendario";
             } catch (e) { console.error(e); }
         }
 
@@ -414,10 +363,10 @@ async function validarCupon() {
             }
             precioAddons = 0;
             document.querySelectorAll('.addon:checked').forEach(c => precioAddons += parseInt(c.getAttribute('data-price')));
-            document.getElementById('total-price').innerText = (precioBaseDia + precioTurnoExtra + precioAddons) + "€";
+            
             const subtotal = (precioBaseDia + precioTurnoExtra + precioAddons);
-    const totalFinal = subtotal - descuentoMonto;
-    document.getElementById('total-price').innerText = (totalFinal < 0 ? 0 : totalFinal) + "€";
+            const totalFinal = Math.max(0, subtotal - descuentoMonto);
+            document.getElementById('total-price').innerText = totalFinal + "€";
         }
 
         document.querySelectorAll('input[name="turno"], .addon').forEach(el => el.addEventListener('change', actualizarTotal));
@@ -425,7 +374,7 @@ async function validarCupon() {
         document.getElementById('booking-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
-            btn.innerText = "PROCESANDO..."; btn.disabled = true;
+            btn.innerText = "ENVIANDO..."; btn.disabled = true;
 
             const datos = {
                 nombre: document.getElementById('nombre').value,
@@ -435,11 +384,10 @@ async function validarCupon() {
                 fechaNacimiento: document.getElementById('fechaNacimiento').value,
                 fecha: document.getElementById('fecha-evento').value,
                 turno: document.querySelector('input[name="turno"]:checked').value,
-                total: parseInt(document.getElementById('total-price').innerText),
-                suplementos: Array.from(document.querySelectorAll('.addon:checked')).map(c => c.value),
                 cupónCodigo: codigoCuponValido,
-    descuentoAplicado: descuentoMonto,
-    total: parseInt(document.getElementById('total-price').innerText)
+                descuentoAplicado: descuentoMonto,
+                total: parseInt(document.getElementById('total-price').innerText),
+                suplementos: Array.from(document.querySelectorAll('.addon:checked')).map(c => c.value)
             };
 
             try {
@@ -449,12 +397,12 @@ async function validarCupon() {
                     body: JSON.stringify(datos)
                 });
                 if(res.ok) {
-                    alert("¡Solicitud enviada correctamente! Revisa tu email.");
+                    alert("¡Solicitud enviada con éxito!");
                     window.location.href = "index.html";
                 }
             } catch (err) {
-                alert("Error al enviar la solicitud.");
-                btn.disabled = false; btn.innerText = "ENVIAR SOLICITUD DE RESERVA";
+                alert("Error al enviar solicitud.");
+                btn.disabled = false; btn.innerText = "ENVIAR SOLICITUD";
             }
         });
 

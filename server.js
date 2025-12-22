@@ -75,6 +75,7 @@ app.post('/api/auth/login', async (req, res) => {
 // 2. Mapa de Disponibilidad
 app.get('/api/reservas/mapa-disponibilidad', async (req, res) => {
     try {
+        // Obtenemos todas las que NO estén canceladas
         const reservas = await Booking.find({ estado: { $ne: 'Cancelada' } });
         const mapa = {};
         reservas.forEach(r => {
@@ -83,7 +84,7 @@ app.get('/api/reservas/mapa-disponibilidad', async (req, res) => {
         });
         res.json(mapa);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener disponibilidad" });
+        res.status(500).json({ error: "Error" });
     }
 });
 
