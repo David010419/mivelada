@@ -1,0 +1,87 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+
+// --- MIDDLEWARES ---
+app.use(express.json());
+app.use(cors());
+// Si tus archivos HTML/JS están en una carpeta llamada 'public', añade esta línea:
+app.use(express.static('public'));
+
+// --- CONEXIÓN A BASE DE DATOS ---
+const uri = process.env.MONGO_URI;
+
+mongoose.connect(uri)
+  .then(() => console.log('✅ Conectado a la Base de Datos con éxito'))
+  .catch(err => console.error('❌ Error al conectar:', err.message));
+
+const BookingSchema = new mongoose.Schema({
+    nombreCliente: String,
+    email: String,
+    fecha: String, 
+    turno: { type: String, enum: ['Día', 'Noche', 'Día Completo'] }, // <--- REVISA ESTA COMA
+    total: Number,                                                 // <--- Y ESTA
+    suplementos: [String],
+    estado: { type: String, default: 'Pendiente' },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Booking = mongoose.model('Booking', BookingSchema);
+
+// --- RUTAS API ---
+
+// 1. Obtener disponibilidad para el calendario (Mapa de turnos)
+app.get('/api/reservas/mapa-disponibilidad', async (req, res) => {
+    try {
+        const reservas = await Booking.find({ estado: { $ne: 'Cancelada' } });
+        const mapa = {};
+        reservas.forEach(r => {
+            if (!mapa[r.fecha]) mapa[r.fecha] = [];
+            mapa[r.fecha].push(r.turno);
+        });
+        res.json(mapa);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener disponibilidad" });
+    }
+});
+
+// Crear una nueva reserva (Desde el formulario del cliente)
+app.post('/api/reservas', async (req, res) => {
+    try {
+        const nuevaReserva = new Booking(req.body);
+        await nuevaReserva.save();
+        res.status(201).json({ mensaje: 'Reserva guardada con éxito' });
+    } catch (error) {
+        res.status(400).json({ error: 'Error al guardar la reserva' });
+    }
+});
+
+// 3. Obtener todas las reservas (Para tu Panel de Admin)
+app.get('/api/admin/informes', async (req, res) => {
+    try {
+        const reservas = await Booking.find().sort({ createdAt: -1 });
+        res.json(reservas);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener informes" });
+    }
+});
+
+// 4. Actualizar estado (Confirmar/Cancelar)
+app.patch('/api/reservas/:id', async (req, res) => {
+    try {
+        const { estado } = req.body;
+        const reservaActualizada = await Booking.findByIdAndUpdate(req.params.id, { estado }, { new: true });
+        res.json(reservaActualizada);
+    } catch (error) {
+        res.status(400).json({ error: 'No se pudo actualizar la reserva' });
+    }
+});
+
+// --- ENCENDER EL SERVIDOR (Esto te faltaba para que PM2 funcione) ---
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Servidor funcionando en puerto ${PORT}`);
+});

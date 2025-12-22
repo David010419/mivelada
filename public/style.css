@@ -1,0 +1,517 @@
+/* Variables de color para fácil edición */
+:root {
+    --dorado: #c5a059;
+    --mate: #121212; /* Gris mate oscuro */
+    --mate-suave: #1e1e1e;
+    --blanco: #ffffff;
+    --borde: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--oscuro);
+    line-height: 1.6;
+    background: #000000;
+}
+
+/* Estilos para el Logo */
+.logo-img {
+    height: 200px; /* Ajusta la altura según tu diseño */
+    width: auto;  /* Mantiene la proporción */
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.05); /* Un pequeño efecto visual elegante al pasar el ratón */
+}
+
+/* Ajuste de la Navbar para alinear el logo verticalmente */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(rgb(0, 0, 0), rgba(33, 33, 33, 0.969), rgb(0, 0, 0) );
+                /*url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--blanco);
+    padding: 0 20px;
+    z-index: 1;
+    overflow: hidden;
+}
+#gold-dust-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Colocamos el polvo DETRÁS del texto (z-index 1) pero sobre el fondo */
+    z-index: -1;
+    pointer-events: none; /* Importante: permite hacer clic en los botones a través del polvo */
+    /* Opcional: un ligero degradado para que el polvo se integre mejor */
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+
+/* Botones */
+.btn-main {
+    padding: 15px 40px;
+    background-color: var(--dorado);
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    background-color: #b08d4a;
+}
+
+.btn-reserva-nav {
+    padding: 10px 20px;
+    border: 1px solid var(--blanco);
+    color: var(--blanco);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* Botón Flotante Móvil */
+.btn-float-mobile {
+            position:fixed;
+            bottom:20px;
+            right:20px;
+            background-color:#25D366;
+            border-radius:50%;
+            width:80px;           /* ancho más grande */
+            height:80px;          /* alto más grande */
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-decoration:none;
+            box-shadow:0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Responsivo (Móvil) */
+@media (max-width: 768px) {
+    .btn-reserva-nav { display: none; }
+    .btn-float-mobile { display: block; }
+    .hero-content h1 { font-size: 2.8rem; }
+}
+
+/* --- Estilos del Carrusel --- */
+
+.carousel-section {
+    padding: 50px 0; /* Espacio arriba y abajo para que respire */
+    background: linear-gradient(rgb(0, 0, 0), #6b5a3a, rgb(0, 0, 0) );
+}
+
+.swiper {
+    width: 100%;
+    height: 450px; /* Altura fija para que sea elegante y uniforme */
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: linear-gradient(rgb(0, 0, 0), #6b5a3a, rgb(0, 0, 0) );
+    /* Centrado flex para el contenido del slide */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Asegura que la imagen no se salga */
+    /* Un toque moderno: bordes ligeramente redondeados en desktop */
+    @media (min-width: 768px) {
+         border-radius: 12px;
+    }
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* CLAVE: Esto hace que la imagen rellene el espacio sin deformarse */
+    transition: transform 0.5s ease;
+}
+
+/* Efecto elegante al pasar el ratón por encima en PC */
+.swiper-slide:hover img {
+    transform: scale(1.03);
+}
+
+/* Personalización de los colores de Swiper para que coincidan con tu marca */
+:root {
+    --swiper-theme-color: var(--dorado); /* Cambia las flechas y puntos a dorado */
+    --swiper-navigation-size: 30px; /* Flechas más discretas y elegantes */
+}
+
+/* Ajuste para móvil */
+@media (max-width: 768px) {
+    .swiper {
+        height: 300px; /* Un poco más bajo en móviles */
+    }
+}
+/* Estilos para la página de Galería */
+/* --- Página de Detalles --- */
+.details-page { padding-top: 100px; background: #fff; }
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    padding: 60px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.spec-card {
+    text-align: center;
+    padding: 30px;
+    border: 1px solid #eee; /* Borde muy fino y elegante */
+    transition: 0.3s;
+}
+
+.spec-card:hover { border-color: var(--dorado); }
+
+.spec-card i {
+    font-size: 1.8rem;
+    color: var(--dorado);
+    margin-bottom: 20px;
+}
+
+/* --- Estilos Galería Zoom --- */
+.gallery-slider { padding: 80px 0; 
+    background: linear-gradient(rgb(0, 0, 0), rgba(33, 33, 33, 0.969), rgb(0, 0, 0) ); }
+
+.swiper-slide { position: relative; border-radius: 8px; overflow: hidden; }
+
+/* Icono de lupa al pasar el ratón */
+.overlay-zoom {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.3s;
+    color: white;
+    font-size: 2rem;
+}
+
+.swiper-slide:hover .overlay-zoom { opacity: 1; }
+
+.hint {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* --- Specs Hero (Estilo Portada) --- */
+.specs-hero {
+    position: relative;
+    height: 100vh; /* Ocupa toda la pantalla como el Hero del index */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+background: linear-gradient(rgb(0, 0, 0), rgba(17, 17, 17, 0.969), rgb(0, 0, 0) );    color: var(--blanco);
+    text-align: center;
+    overflow: hidden;
+}
+
+.specs-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Filtro oscuro para que el texto brille */
+    z-index: 1;
+}
+
+.specs-content {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.section-title-hero {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 60px;
+    letter-spacing: 2px;
+}
+
+/* Grid Premium */
+.specs-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.spec-card-premium {
+    background: rgba(255, 255, 255, 0.05); /* Efecto cristalino */
+    backdrop-filter: blur(10px); /* Desenfoque de fondo muy moderno */
+    padding: 40px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spec-card-premium:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--dorado);
+    transform: translateY(-10px); /* Pequeña elevación */
+}
+
+.spec-card-premium i {
+    font-size: 2.5rem;
+    color: var(--dorado);
+    margin-bottom: 20px;
+}
+
+.spec-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.spec-info p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #ccc;
+    line-height: 1.4;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .specs-hero {
+        height: auto;
+        padding: 120px 20px 60px 20px;
+    }
+    .specs-grid-premium {
+        gap: 20px;
+    }
+}
+/* --- Estilos del Modal --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px); /* Efecto desenfoque */
+    display: none; /* Oculto por defecto */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    max-width: 550px;
+    width: 100%;
+    border-radius: 4px;
+    text-align: center;
+    position: relative;
+    animation: fadeInModal 0.4s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.playfair { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 10px; }
+.subtitle { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+
+.normas-list {
+    text-align: left;
+    list-style: none;
+    margin-bottom: 30px;
+}
+
+.normas-list li {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.normas-list i { color: var(--dorado); margin-top: 4px; }
+
+/* Botones del Modal */
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-cancelar {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 12px 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-aceptar {
+    background: var(--dorado);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-aceptar:hover { background: #b08d4a; }
+
+.booking-page { padding: 120px 5% 60px; background: #fdfdfd; min-height: 100vh; }
+.container-small { max-width: 600px; margin: 0 auto; }
+
+.form-section { margin-bottom: 35px; }
+.form-section label { display: block; font-weight: 600; margin-bottom: 15px; font-size: 1.1rem; }
+
+/* Estilo del input del calendario */
+#fecha-evento {
+    width: 100%; padding: 15px; border: 1px solid #ddd;
+    font-family: 'Montserrat', sans-serif; font-size: 1rem; outline: none;
+}
+
+.badge { 
+    display: inline-block; margin-top: 10px; padding: 5px 12px; 
+    background: #eee; font-size: 0.8rem; border-radius: 20px; color: white;
+}
+
+/* Suplementos */
+.supplements-grid { display: flex; flex-direction: column; gap: 12px; }
+.check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 15px; border: 1px solid #eee; cursor: pointer; transition: 0.3s;
+}
+.check-item:hover { border-color: var(--dorado); }
+
+/* Tarjeta de Resumen */
+.summary-card {
+    background: #1a1a1a; color: white; padding: 30px;
+    margin: 40px 0; border-radius: 4px;
+}
+.summary-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 300; }
+.total-line { 
+    display: flex; justify-content: space-between; 
+    font-size: 1.5rem; font-family: 'Playfair Display', serif; margin-top: 15px;
+    color: var(--dorado);
+}
+
+.full-width { width: 100%; border: none; cursor: pointer; font-size: 1rem; }
+
+.dispo-verde { background: #d4edda;}
+.dispo-amarillo { background: #fff3cd; }
+.dispo-rojo { background: #f8d7da; pointer-events: none; }
+
+/* ============================================================
+   REGLAS EXCLUSIVAS PARA MÓVIL (Pantallas menores a 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+    
+    /* 1. AJUSTE BOTÓN "RESERVAR AHORA" EN NAVBAR */
+    .navbar .btn-main {
+        padding: 8px 15px; /* Más pequeño */
+        font-size: 13px;   /* Letra más legible para botón pequeño */
+        letter-spacing: 0;
+    }
+
+    /* 2. SOLUCIÓN GALERÍA Y SOLAPAMIENTO DE NAV */
+    /* Añadimos margen al body o al primer contenedor para que el Nav no lo tape */
+    header.hero {
+        padding-top: 100px; /* Empuja el contenido hacia abajo para que no lo coma el nav */
+        min-height: auto;   /* Evita que el hero sea gigante en móvil */
+        margin-bottom: 40px; /* Separa el hero del carrusel para que no se junten */
+    }
+
+    .hero-content h1 {
+        font-size: 28px; /* Reducimos el título para que no se desborde */
+        line-height: 1.2;
+    }
+
+    /* Contenedores de la galería para que no se salgan */
+    .gallery-container, .container {
+        width: 90% !important; 
+        margin: 0 auto;
+        overflow: hidden; /* Evita desbordamientos laterales */
+    }
+
+    /* 3. FORMULARIO DE RESERVAS - CALENDARIO */
+    /* Evitamos que el calendario se salga de la pantalla */
+    .flatpickr-calendar {
+        width: 280px !important; /* Forzamos un ancho que quepa en cualquier móvil */
+    }
+
+    input[type="text"], 
+    input[type="email"], 
+    input[type="date"],
+    .input-field {
+        width: 100% !important;
+        box-sizing: border-box; /* Asegura que el padding no sume al ancho total */
+    }
+
+    /* 4. TURNOS (DÍA, NOCHE, DÍA COMPLETO) EN COLUMNA */
+    /* Suponiendo que tus botones de turno tienen una clase similar a 'turno-container' */
+    /* Forzamos que se comporten como los suplementos (uno debajo de otro) */
+    .selector-turno, .turnos-wrapper { 
+        display: flex;
+        flex-direction: column; /* De horizontal a vertical */
+        gap: 10px;
+    }
+
+    .selector-turno label, .btn-turno {
+        width: 100% !important; /* Que ocupen todo el ancho */
+        margin-right: 0 !important;
+        display: block;
+        text-align: center;
+    }
+
+    /* Ajuste de márgenes del carrusel en móvil */
+    .carousel-section {
+        margin-top: 20px;
+        padding: 0 10px;
+    }
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Premium | Mi Velada</title>
+    <link rel="stylesheet" href="reserva.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar" style="background: rgba(0,0,0,0.9); border-bottom: 1px solid #333;">
+        <a href="#"><img src="logo.png" alt="Logo Local" class="logo-img"></a>
+        <a href="index.html" class="btn-main" style="color: white; text-decoration: none; font-size: 0.9rem;">← Volver al Inicio</a>
+    </nav>
+
+    <main class="booking-page">
+        <div class="container-small">
+            <h1 class="playfair">Solicitud de Reserva</h1>
+            <p class="subtitle">Gestiona tu evento en nuestro espacio exclusivo.</p>
+
+            <form id="booking-form">
+                <div class="form-section">
+                    <label class="section-label">Información de Contacto</label>
+                    <div class="input-group">
+                        <input type="text" id="nombre" class="input-field" placeholder="Tu nombre completo" required>
+                        <input type="email" id="email" class="input-field" placeholder="Tu correo electrónico" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">Fecha del Evento</label>
+                    <input type="text" id="fecha-evento" class="input-field" style="width: 100%; cursor: pointer;" placeholder="Cargando disponibilidad..." required readonly>
+                    <div id="price-badge" class="badge">Selecciona una fecha</div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">Elección de Turno</label>
+                    <div class="shift-grid">
+                        <label class="supp-card shift-card">
+                            <input type="radio" name="turno" value="Día" id="shift-day" required disabled>
+                            <i class="fas fa-sun"></i>
+                            <h3>Turno Día</h3>
+                            <span>10:00h - 17:00h</span>
+                        </label>
+
+                        <label class="supp-card shift-card">
+                            <input type="radio" name="turno" value="Noche" id="shift-night" disabled>
+                            <i class="fas fa-moon"></i>
+                            <h3>Turno Noche</h3>
+                            <span>19:00h - 02:00h <b>(+200€)</b></span>
+                        </label>
+
+                        <label class="supp-card shift-card">
+                            <input type="radio" name="turno" value="Día Completo" id="shift-full" disabled>
+                            <i class="fas fa-clock"></i>
+                            <h3>Día Completo</h3>
+                            <span>10:00h - 02:00h <b>(+600€)</b></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">Servicios Adicionales</label>
+                    <div class="supplements-grid">
+                        <label class="supp-card">
+                            <input type="checkbox" class="addon" data-price="150" value="Limpieza">
+                            <i class="fas fa-hand-sparkles"></i>
+                            <h3>Limpieza</h3>
+                            <span>+150€</span>
+                        </label>
+                        <label class="supp-card">
+                            <input type="checkbox" class="addon" data-price="300" value="Sonido">
+                            <i class="fas fa-music"></i>
+                            <h3>Sonido Pro</h3>
+                            <span>+300€</span>
+                        </label>
+                        <label class="supp-card">
+                            <input type="checkbox" class="addon" data-price="500" value="Catering">
+                            <i class="fas fa-utensils"></i>
+                            <h3>Catering</h3>
+                            <span>+500€</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-line">Alquiler Base: <span id="base-price-display">0€</span></div>
+                    <div class="summary-line">Extra por Turno: <span id="shift-price-display">0€</span></div>
+                    <div class="summary-line">Suplementos: <span id="addon-price-display">0€</span></div>
+                    <div class="total-line">
+                        <span>Total Estimado</span>
+                        <span id="total-price">0€</span>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit" class="btn-submit">Confirmar Solicitud de Reserva</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <script>
+        const PRECIO_DIARIO = 800;
+        const PRECIO_FINDE = 1200;
+        const PLUS_NOCHE = 200;
+        const PLUS_COMPLETO = 600;
+
+        let precioBaseDia = 0;
+        let precioTurnoExtra = 0;
+        let precioAddons = 0;
+        let mapaDisponibilidad = {};
+        let calendarInstance;
+
+        // 1. Inicializar Calendario de inmediato (Carga rápida)
+        function initCalendar() {
+            calendarInstance = flatpickr("#fecha-evento", {
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                disableMobile: true,
+                locale: "es",
+                placeholder: "Selecciona una fecha...",
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj;
+                    const fStr = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+                    const turnos = mapaDisponibilidad[fStr] || [];
+
+                    if (turnos.includes("Día Completo") || turnos.length >= 2) {
+                        dayElem.classList.add("dispo-rojo");
+                    } else if (turnos.length === 1) {
+                        dayElem.classList.add("dispo-amarillo");
+                    } else if (Object.keys(mapaDisponibilidad).length > 0) {
+                        dayElem.classList.add("dispo-verde");
+                    }
+                },
+                onChange: function(selectedDates, dateStr) {
+                    actualizarLogicaTurnos(selectedDates[0], dateStr);
+                }
+            });
+            
+            cargarDatosDisponibilidad();
+        }
+
+        // 2. Cargar datos en segundo plano
+        async function cargarDatosDisponibilidad() {
+            try {
+                const res = await fetch('/api/reservas/mapa-disponibilidad');
+                mapaDisponibilidad = await res.json();
+                calendarInstance.redraw(); // Pintar colores una vez lleguen los datos
+                document.getElementById('fecha-evento').placeholder = "Abrir calendario para ver disponibilidad...";
+            } catch (e) {
+                console.error("Error cargando disponibilidad", e);
+            }
+        }
+
+        function actualizarLogicaTurnos(fecha, dateStr) {
+            const diaSemana = fecha.getDay();
+            const esFinde = (diaSemana === 0 || diaSemana === 5 || diaSemana === 6);
+            precioBaseDia = esFinde ? PRECIO_FINDE : PRECIO_DIARIO;
+            
+            const badge = document.getElementById('price-badge');
+            badge.innerText = esFinde ? "Tarifa Fin de Semana" : "Tarifa Entre Semana";
+            badge.style.background = "var(--dorado)";
+
+            const turnosCogidos = mapaDisponibilidad[dateStr] || [];
+            const rDia = document.getElementById('shift-day');
+            const rNoche = document.getElementById('shift-night');
+            const rFull = document.getElementById('shift-full');
+
+            rDia.disabled = turnosCogidos.includes('Día') || turnosCogidos.includes('Día Completo');
+            rNoche.disabled = turnosCogidos.includes('Noche') || turnosCogidos.includes('Día Completo');
+            rFull.disabled = turnosCogidos.length > 0;
+
+            if((rDia.checked && rDia.disabled) || (rNoche.checked && rNoche.disabled) || (rFull.checked && rFull.disabled)) {
+                rDia.checked = rNoche.checked = rFull.checked = false;
+                precioTurnoExtra = 0;
+            }
+            actualizarTotal();
+        }
+
+        // 3. Eventos de UI
+        document.querySelectorAll('input[name="turno"]').forEach(r => {
+            r.addEventListener('change', () => {
+                if (r.value === 'Noche') precioTurnoExtra = PLUS_NOCHE;
+                else if (r.value === 'Día Completo') precioTurnoExtra = PLUS_COMPLETO;
+                else precioTurnoExtra = 0;
+                actualizarTotal();
+            });
+        });
+
+        document.querySelectorAll('.addon').forEach(b => {
+            b.addEventListener('change', () => {
+                precioAddons = 0;
+                document.querySelectorAll('.addon:checked').forEach(c => {
+                    precioAddons += parseInt(c.getAttribute('data-price'));
+                });
+                actualizarTotal();
+            });
+        });
+
+        function actualizarTotal() {
+            document.getElementById('base-price-display').innerText = precioBaseDia + "€";
+            document.getElementById('shift-price-display').innerText = precioTurnoExtra + "€";
+            document.getElementById('addon-price-display').innerText = precioAddons + "€";
+            document.getElementById('total-price').innerText = (precioBaseDia + precioTurnoExtra + precioAddons) + "€";
+        }
+
+        // 4. Envío de datos corregido
+        document.getElementById('booking-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            const turno = document.querySelector('input[name="turno"]:checked');
+            
+            if(!turno) return alert("Por favor, elige un turno disponible.");
+
+            // Feedback visual: Desactivar botón para evitar doble click
+            btn.innerText = "Procesando solicitud...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            const datos = {
+                nombreCliente: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                fecha: document.getElementById('fecha-evento').value,
+                turno: turno.value,
+                total: (precioBaseDia + precioTurnoExtra + precioAddons),
+                suplementos: Array.from(document.querySelectorAll('.addon:checked')).map(c => c.value)
+            };
+
+            try {
+                const res = await fetch('/api/reservas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                if(res.ok) {
+                    alert("¡Solicitud recibida! Revisa tu correo electrónico. Te contactaremos pronto.");
+                    window.location.href = "index.html";
+                } else {
+                    throw new Error("Error en el servidor");
+                }
+            } catch (error) {
+                alert("Hubo un problema al enviar la reserva. Por favor, inténtalo de nuevo.");
+                btn.innerText = "Confirmar Solicitud de Reserva";
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        });
+
+        initCalendar();
+    </script>
+</body>
+</html>

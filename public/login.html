@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Admin | Mi Velada</title>
+    <link rel="stylesheet" href="login.css">
+    <style>
+        .login-box { background: #1a1a1a; padding: 40px; border-radius: 8px; max-width: 400px; margin: 100px auto; border: 1px solid var(--dorado); text-align: center; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; background: #333; border: 1px solid #444; color: white; }
+    </style>
+</head>
+<body style="background: #000;">
+    <div class="login-container">
+    <div class="login-box">
+        <h2>Mi Velada</h2>
+        <p>Acceso exclusivo para administración</p>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="user" placeholder="Introduce tu usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-login">Entrar al Panel</button>
+        </form>
+        
+        <a href="index.html" class="back-link">← Volver a la web pública</a>
+    </div>
+</div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user: document.getElementById('user').value,
+                    password: document.getElementById('password').value
+                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('adminToken', data.token);
+                window.location.href = 'admin.html';
+            } else {
+                alert(data.msg);
+            }
+        });
+    </script>
+</body>
+</html>

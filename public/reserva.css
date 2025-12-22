@@ -1,0 +1,257 @@
+/* ==========================================
+   RESERVA.CSS - DISEÑO UNIFICADO Y RESPONSIVO
+   ========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --dorado: #c5a059;
+    --mate: #121212;
+    --mate-suave: #1e1e1e;
+    --blanco: #ffffff;
+    --borde: #333;
+}
+
+body {
+    background-color: var(--mate);
+    color: var(--blanco);
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* --- LOGO Y NAVEGACIÓN --- */
+.logo-img {
+    height: 100px;
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+}
+
+/* --- ESTRUCTURA PÁGINA --- */
+.booking-page { padding: 120px 5% 60px; min-height: 100vh; }
+.container-small { max-width: 800px; margin: 0 auto; }
+
+/* Títulos */
+.playfair { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 2.8rem; 
+    text-align: center; 
+    color: var(--blanco); 
+    margin-bottom: 10px;
+}
+.subtitle { text-align: center; color: #888; margin-bottom: 50px; }
+
+.form-section { margin-bottom: 60px; }
+.section-label { 
+    display: block; font-weight: 600; font-size: 1.2rem; 
+    margin-bottom: 25px; color: var(--dorado); border-bottom: 1px solid var(--borde); padding-bottom: 10px;
+}
+
+/* --- CAMPOS DE ENTRADA --- */
+.input-group { 
+    display: flex; 
+    gap: 20px; 
+    width: 100%;
+}
+
+.input-group input {
+    flex: 1;
+    width: 0; 
+}
+
+.input-field { 
+    background: var(--mate-suave);
+    border: 1px solid var(--borde);
+    padding: 18px;
+    color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    display: block;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+.input-field:focus { border-color: var(--dorado); outline: none; }
+
+/* --- CALENDARIO (Flatpickr) --- */
+.flatpickr-calendar { 
+    background: #222 !important; 
+    border: 1px solid #444 !important; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+.flatpickr-day { color: white !important; }
+.flatpickr-day.dispo-verde { background: #1b5e20 !important; border-color: #1b5e20 !important; color: white !important; }
+.flatpickr-day.dispo-amarillo { background: #fbc02d !important; border-color: #fbc02d !important; color: black !important; }
+.flatpickr-day.dispo-rojo { background: #b71c1c !important; border-color: #b71c1c !important; color: white !important; opacity: 0.6; cursor: not-allowed !important; }
+.flatpickr-day.selected { background: var(--dorado) !important; color: white !important; }
+
+/* --- GRID DE TURNOS Y SUPLEMENTOS --- */
+.shift-grid, .supplements-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px; 
+}
+
+.shift-card, .supp-card {
+    background: var(--mate-suave); 
+    border: 1px solid var(--borde);
+    padding: 30px 20px; 
+    text-align: center; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    transition: 0.3s;
+    position: relative;
+}
+
+.shift-card i, .supp-card i { font-size: 2.2rem; color: var(--dorado); margin-bottom: 15px; }
+
+/* Ocultar inputs nativos */
+.shift-card input, .supp-card input { display: none; }
+
+/* Estados Selección */
+.shift-card:has(input:checked), .supp-card:has(input:checked) { 
+    border-color: var(--dorado); 
+    background: rgba(197, 160, 89, 0.1);
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+}
+
+/* Estado Deshabilitado */
+.shift-card:has(input:disabled) {
+    opacity: 0.2;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+/* --- RESUMEN Y BOTÓN --- */
+.summary-card { 
+    background: #000; 
+    padding: 40px; 
+    border-radius: 8px; 
+    border: 1px solid var(--dorado); 
+}
+
+.total-line { 
+    font-size: 2rem; 
+    color: var(--dorado); 
+    font-family: 'Playfair Display', serif; 
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 20px; 
+    border-top: 1px solid #333; 
+    padding-top: 20px; 
+}
+
+.btn-submit {
+    display: block; width: 100%; padding: 20px;
+    background-color: var(--dorado); color: white;
+    border: none; border-radius: 4px; font-weight: 700;
+    font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;
+    cursor: pointer; margin-top: 30px; transition: 0.3s;
+}
+.btn-submit:hover { background-color: #b08d4a; transform: translateY(-2px); }
+.btn-main {
+    padding: 15px 40px;
+    background-color: var(--dorado);
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+/* ============================================================
+   AJUSTES ESPECÍFICOS PARA MÓVIL (Reserva)
+   ============================================================ */
+@media (max-width: 768px) {
+    
+    .navbar {
+        padding: 10px 5%;
+        background: rgba(18, 18, 18, 0.95);
+        position: fixed;
+    }
+
+    .logo-img {
+        height: 60px; /* Logo más discreto en móvil */
+    }
+
+    .booking-page {
+        padding-top: 100px; /* Espacio para el nav fixed */
+    }
+
+    .playfair {
+        font-size: 1.8rem; /* Título escalado */
+    }
+
+    .subtitle {
+        margin-bottom: 30px;
+    }
+
+    /* Campos Nombre y Email en columna */
+    .input-group { 
+        flex-direction: column; 
+        gap: 15px; 
+    }
+    
+    .input-group input {
+        width: 100%;
+    }
+
+    /* FIX CALENDARIO: Evitar que se salga de la pantalla */
+    .flatpickr-calendar {
+        width: 100% !important;
+        max-width: 310px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+
+    /* TURNOS Y SUPLEMENTOS EN UNA SOLA COLUMNA */
+    .shift-grid, .supplements-grid {
+        grid-template-columns: 1fr; /* Forzado a una columna */
+        gap: 15px;
+    }
+
+    .shift-card, .supp-card {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        gap: 20px;
+    }
+
+    .shift-card i, .supp-card i {
+        margin-bottom: 0;
+        font-size: 1.8rem;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .shift-card h3, .supp-card span {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    /* Resumen de reserva */
+    .summary-card {
+        padding: 25px 20px;
+    }
+
+    .total-line {
+        font-size: 1.5rem;
+    }
+}

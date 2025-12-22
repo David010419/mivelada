@@ -1,0 +1,95 @@
+const express = require('express');
+
+const mongoose = require('mongoose');
+
+const cors = require('cors');
+
+require('dotenv').config();
+
+
+
+const app = express();
+
+app.use(express.json());
+
+app.use(cors());
+
+
+
+
+
+const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/mivelada';
+
+// Conexión a MongoDB (Usa tu cadena de conexión de MongoDB Atlas)
+
+mongoose.connect(uri)
+
+  .then(() => console.log('✅ Conectado a la Base de Datos con éxito'))
+
+  .catch(err => console.error('❌ Error al conectar:', err));
+
+
+
+// Modelo de Reserva
+
+const BookingSchema = new mongoose.Schema({
+
+    nombreCliente: String,
+
+    email: String,
+
+    fecha: String, // Formato YYYY-MM-DD
+
+    total: Number,
+
+    suplementos: [String],
+
+    estado: { type: String, default: 'Pendiente' }, // Pendiente, Confirmada, Cancelada
+
+    createdAt: { type: Date, default: Date.now }
+
+});
+
+
+
+const Booking = mongoose.model('Booking', BookingSchema);
+
+
+
+// RUTAS API
+
+
+
+// 1. Obtener solo las fechas ocupadas (Para el calendario)
+
+app.get('/api/reservas/ocupadas', async (req, res) => {
+
+    const reservas = await Booking.find({ estado: { $ne: 'Cancelada' } });
+
+    const fechas = reservas.map(r => r.fecha);
+
+    res.json(fechas);
+
+});
+
+
+
+// 2. Crear una nueva reserva
+
+app.post('/api/reservas', async (req, res) => {
+
+    try {
+
+        const nuevaReserva = new Booking(req.body);
+
+        await nuevaReserva.save();
+
+        res.status(201).json({ mensaje: 'Reserva guardada con éxito' });
+
+    } catch (error) {
+
+        res.status(400).json({ error: 'Error al guardar la reserva' });
+
+    }
+
+});

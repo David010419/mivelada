@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conoce el Espacio | Mi Local</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
+
+    <style>
+        
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(rgb(0, 0, 0), rgba(17, 17, 17, 0.969), rgb(0, 0, 0));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        #gold-dust-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .specs-content {
+            position: relative;
+            z-index: 2; 
+            width: 100%;
+        }
+
+       
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 120px;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="logo.png" alt="Logo" class="logo-img"></a>
+        </div>
+        <a href="index.html" class="btn-main" style="color: white; text-decoration: none;">← Volver</a>
+    </nav>
+    <br>
+    <br>
+
+    <header class="hero">
+        <div id="gold-dust-canvas"></div>
+
+        <div class="container specs-content">
+            <br>
+            <h1 class="playfair" style="color: white; text-align: center; font-size: clamp(2rem, 5vw, 3.5rem);">Nuestra sala dispone</h1>
+            <br>
+            <div class="specs-grid-premium">
+                <div class="spec-card-premium">
+                    <i class="fas fa-users"></i>
+                    <div class="spec-info">
+                        <h3>Capacidad</h3>
+                        <p>150 personas (Cóctel)<br>100 (Banquete)</p>
+                    </div>
+                </div>
+                <div class="spec-card-premium">
+                    <i class="fas fa-snowflake"></i>
+                    <div class="spec-info">
+                        <h3>Climatización</h3>
+                        <p>Sistema de climatización frío/calor</p>
+                    </div>
+                </div>
+                <div class="spec-card-premium">
+                    <i class="fas fa-volume-up"></i>
+                    <div class="spec-info">
+                        <h3>Sonido e Iluminación</h3>
+                        <p>Equipamiento profesional de última generación</p>
+                    </div>
+                </div>
+                <div class="spec-card-premium">
+                    <i class="fas fa-utensils"></i>
+                    <div class="spec-info">
+                        <h3>Catering</h3>
+                        <p>Cocina propia y zona de office para externos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <br>
+    <br>
+
+
+    <main>
+        <section class="gallery-slider">
+            <h2 class="playfair" style="text-align: center; color: white; margin-bottom: 40px;"></h2>
+            <div class="swiper gallerySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a href="./public/gal1.jpeg" class="glightbox">
+                            <img src="./public/gal1.jpeg" alt="Local 1">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="./public/gal2.jpeg" class="glightbox">
+                            <img src="./public/gal2.jpeg" alt="Local 2">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="./public/gal3.jpeg" class="glightbox">
+                            <img src="./public/gal3.jpeg" alt="Local 3">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="./public/gal4.jpg" class="glightbox">
+                            <img src="./public/gal4.jpg" alt="Local 4">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="./public/gal5.jpg" class="glightbox">
+                            <img src="./public/gal5.jpg" alt="Local 5">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="./public/gal6.jpg" class="glightbox">
+                            <img src="./public/gal6.jpg" alt="Local 6">
+                            <div class="overlay-zoom"><i class="fas fa-search-plus"></i></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            <p class="hint">Haz clic en las imágenes para ampliarlas</p>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+
+    <script>
+        tsParticles.load("gold-dust-canvas", {
+            particles: {
+                number: { value: 400, density: { enable: true, value_area: 800 } },
+                color: { value: "#c5a059" },
+                shape: { type: "circle" },
+                opacity: {
+                    value: 1,
+                    random: true,
+                    anim: { enable: true, speed: 3, opacity_min: 0, sync: false }
+                },
+                size: {
+                    value: 1.5,
+                    random: { enable: true, minimumValue: 0.5 },
+                    anim: { enable: false }
+                },
+                shadow: { enable: true, color: "#D4AF37", blur: 3 },
+                move: {
+                    enable: true,
+                    speed: 0.8,
+                    direction: "right", 
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "bubble" }, resize: true },
+                modes: { bubble: { distance: 150, size: 3, duration: 2, opacity: 1 } }
+            },
+            retina_detect: true,
+            fullScreen: { enable: false }
+        });
+    </script>
+
+    <script>
+        // Inicializar Carrusel
+        var swiper = new Swiper(".gallerySwiper", {
+            slidesPerView: 1.2,
+            centeredSlides: true,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: { delay: 3000 },
+            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+            breakpoints: {
+                768: { slidesPerView: 2.5, spaceBetween: 40 }
+            }
+        });
+
+       
+        const lightbox = GLightbox({
+            selector: '.glightbox',
+            touchNavigation: true,
+            loop: true
+        });
+    </script>
+</body>
+</html>
