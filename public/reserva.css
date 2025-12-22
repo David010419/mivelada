@@ -255,3 +255,33 @@ body {
         font-size: 1.5rem;
     }
 }
+/* Ajuste para que los campos salgan en pareja */
+.input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.input-group .input-field, 
+.input-group div {
+    flex: 1; /* Esto hace que ambos midan lo mismo */
+}
+
+/* En móviles se ponen uno debajo de otro */
+@media (max-width: 600px) {
+    .input-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Estilo para que el label de fecha nacimiento quede elegante */
+.field-label {
+    font-size: 0.75rem;
+    color: #c5a059;
+    margin-bottom: 5px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

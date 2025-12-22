@@ -61,33 +61,46 @@
             } catch (error) { console.error(error); }
         }
 
-        function actualizarInterfaz(reservas) {
-            let ingresos = 0, validas = 0;
-            const tbody = document.querySelector('#tabla-reservas tbody');
-            tbody.innerHTML = ''; 
+       function actualizarInterfaz(reservas) {
+    let ingresos = 0, validas = 0;
+    const tbody = document.querySelector('#tabla-reservas tbody');
+    tbody.innerHTML = ''; 
 
-            reservas.forEach(r => {
-                if (r.estado !== 'Cancelada') { ingresos += r.total; validas++; }
-                const statusClass = r.estado ? r.estado.toLowerCase() : 'pendiente';
-                
-                // NOTA: El data-label es lo que permite el diseño móvil
-                const fila = `
-                    <tr>
-                        <td data-label="FECHA"><strong>${r.fecha}</strong> <small>${r.turno}</small></td>
-                        <td data-label="CLIENTE">${r.nombreCliente}</td>
-                        <td data-label="EMAIL">${r.email}</td>
-                        <td data-label="TOTAL"><strong>${r.total}€</strong></td>
-                        <td data-label="ESTADO"><span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span></td>
-                        <td data-label="GESTIÓN">
-                            <div class="actions">
-                                <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">✓</button>
-                                <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">✕</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += fila;
-            });
+    reservas.forEach(r => {
+        if (r.estado !== 'Cancelada') { ingresos += r.total; validas++; }
+        const statusClass = r.estado ? r.estado.toLowerCase() : 'pendiente';
+        
+        const fila = `
+            <tr>
+                <td data-label="FECHA"><strong>${r.fecha}</strong> <small>${r.turno}</small></td>
+                <td data-label="CLIENTE">
+                    ${r.nombre} ${r.apellidos || ''}<br>
+                    <small style="color:var(--dorado)">${r.fechaNacimiento || 'N/A'}</small>
+                </td>
+                <td data-label="CONTACTO">
+                    ${r.email}<br>
+                    <a href="https://wa.me/${r.telefono}" target="_blank" style="color:#25d366; text-decoration:none;">
+                        <i class="fab fa-whatsapp"></i> ${r.telefono || 'Sin tel.'}
+                    </a>
+                </td>
+                <td data-label="TOTAL">
+            <strong>${r.total}€</strong>
+            ${r.descuentoAplicado > 0 ? 
+                `<br><small style="color: #2ecc71;">Dto: -${r.descuentoAplicado}€ (${r.cupónCodigo})</small>` : 
+                ''
+            }
+        </td>
+                <td data-label="ESTADO"><span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span></td>
+                <td data-label="GESTIÓN">
+                    <div class="actions">
+                        <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">✓</button>
+                        <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">✕</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += fila;
+    });
 
             document.getElementById('total-reservas').innerText = reservas.length;
             document.getElementById('ingresos-totales').innerText = ingresos + "€";
