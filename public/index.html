@@ -11,10 +11,15 @@
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
 
     <style>
+        :root {
+            --dorado: #c5a059;
+            --mate: #1a1a1a;
+        }
+
         /* Efectos de las partículas */
         .hero {
             position: relative;
-            overflow: hidden; /* Límite de las partículas*/
+            overflow: hidden;
         }
 
         #gold-dust-canvas {
@@ -23,14 +28,86 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Detrás del texto */
-            pointer-events: none; /* Permite hacer clic en los botones debajo */
+            z-index: 1;
+            pointer-events: none;
         }
 
         .hero-content {
             position: relative;
-            z-index: 2; /* Texto por encima del polvo */
+            z-index: 2;
         }
+
+        /* --- NUEVO: BOTÓN WHATSAPP MODERNO --- */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 9999; /* Por encima de todo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #20ba5a;
+        }
+
+        /* Efecto de pulso para el botón */
+        .whatsapp-float::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #25d366;
+            opacity: 0.7;
+            z-index: -1;
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        @keyframes pulse-whatsapp {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        /* --- NUEVO: SECCIÓN MAPA --- */
+        .map-section {
+            padding: 60px 5%;
+            background-color: var(--mate);
+            text-align: center;
+        }
+
+        .map-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 2px solid var(--dorado);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .map-container iframe {
+            display: block;
+            filter: grayscale(0.5) contrast(1.2); /* Estilo moderno algo desaturado */
+        }
+
+        .hero, .carousel-section {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    will-change: transform;
+}
     </style>
 </head>
 <body>
@@ -44,7 +121,6 @@
 
     <header class="hero">
         <div id="gold-dust-canvas"></div>
-
         <div class="hero-content">
             <h1 class="playfair">El escenario de tus mejores recuerdos</h1>
             <p>Un espacio exclusivo para celebraciones privadas, eventos corporativos y fiestas.</p>
@@ -71,6 +147,21 @@
         </div>
     </section>
 
+    <section class="map-section">
+        <h2 class="playfair" style="color: var(--dorado); margin-bottom: 20px;">Nuestra Ubicación</h2>
+        <p style="color: #fff; margin-bottom: 30px;">Ven a visitarnos y conoce nuestro espacio exclusivo.</p>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1519.6868281507545!2d-0.49325340854789407!3d38.36207852467588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2ses!4v1766421278873!5m2!1ses!2ses"
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </section>
+
     <div id="modal-normas" class="modal-overlay">
         <div class="modal-content">
             <h2 class="playfair">Aviso Importante</h2>
@@ -89,93 +180,71 @@
         </div>
     </div>
 
-    <a href="https://wa.me/34614500140" class="btn-float-mobile">Reserva por WhatsApp</a>
+    <a href="https://wa.me/34614500140" class="whatsapp-float" target="_blank">
+        <svg width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+        </svg>
+    </a>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
-    tsParticles.load("gold-dust-canvas", {
+        tsParticles.load("gold-dust-canvas", {
         particles: {
             number: { 
-                value: 400, 
-                density: { enable: true, value_area: 800 } 
+                value: 800, // Reducido para fluidez total
+                density: { enable: true, value_area: 1000 } 
             },
             color: { value: "#c5a059" }, 
             shape: { type: "circle" },
             opacity: {
-                value: 1, 
+                value: { min: 0.3, max: 0.8 }, // Opacidad variable en lugar de sombra
                 random: true,
                 anim: { 
                     enable: true, 
-                    speed: 3, 
+                    speed: 1, 
                     opacity_min: 0, 
                     sync: false 
                 }
             },
             size: {
-                value: 1.5, // Tamaño de la mota
-                random: { enable: true, minimumValue: 0.5 },
-                anim: { enable: false }
+                value: { min: 0.5, max: 1.5 },
+                random: true
             },
-            // Resplandor
-            shadow: {
-                enable: true,
-                color: "#D4AF37",
-                blur: 3
-            },
+            // SE HA ELIMINADO EL APARTADO SHADOW (Es lo que causaba el lag)
             move: {
                 enable: true,
-                speed: 1, // Movimiento lento
+                speed: 0.6, // Un poco más lento es más elegante y consume menos
                 direction: "right", 
                 random: true,
                 straight: false,
                 out_mode: "out",
-                bounce: false,
             }
         },
         interactivity: {
             detect_on: "canvas",
             events: {
                 onhover: { 
-                    enable: true, 
-                    mode: "bubble" // Las partículas crecen un poco al pasar el ratón
+                    enable: false // Desactivamos el efecto hover para ahorrar cálculos constantes
                 },
                 resize: true
-            },
-            modes: {
-                bubble: { distance: 150, size: 3, duration: 2, opacity: 1 }
             }
         },
-        retina_detect: true,
+        retina_detect: false, // Desactivado para ordenadores de oficina
         fullScreen: { enable: false }
     });
-</script>
-
-   <script>
-    var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 1,
-        loop: true,
-        autoplay: { delay: 3500, disableOnInteraction: false },
-        pagination: { el: ".swiper-pagination", clickable: true },
-        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-        
-        
-        breakpoints: {
-            768: { 
-                slidesPerView: 1.5, 
-                centeredSlides: true,
-                spaceBetween: 20 // 3cm de separación en tablets
-            },
-            1024: { 
-                slidesPerView: 2.5, 
-                centeredSlides: true,
-                spaceBetween: 30 // 5cm de separación en monitores grandes
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            loop: true,
+            autoplay: { delay: 3500, disableOnInteraction: false },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+            breakpoints: {
+                768: { slidesPerView: 1.5, centeredSlides: true, spaceBetween: 20 },
+                1024: { slidesPerView: 2.5, centeredSlides: true, spaceBetween: 30 }
             }
-        }
-    });
-</script>
+        });
 
-<script>
         function abrirModal() {
             document.getElementById('modal-normas').style.display = 'flex';
             document.body.style.overflow = 'hidden'; 

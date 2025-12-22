@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiVelada | Eventos Exclusivos</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.12.0/tsparticles.slim.bundle.min.js"></script>
+
+    <style>
+        /* Efectos de las partículas */
+        .hero {
+            position: relative;
+            overflow: hidden; /* Límite de las partículas*/
+        }
+
+        #gold-dust-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Detrás del texto */
+            pointer-events: none; /* Permite hacer clic en los botones debajo */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Texto por encima del polvo */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+             <a href="#"><img src="logo.png" alt="Logo Local" class="logo-img"></a>
+        </div>
+        <a href="javascript:void(0)" onclick="abrirModal()" class="btn-main">Reservar ahora</a>
+    </nav>
+
+    <header class="hero">
+        <div id="gold-dust-canvas"></div>
+
+        <div class="hero-content">
+            <h1 class="playfair">El escenario de tus mejores recuerdos</h1>
+            <p>Un espacio exclusivo para celebraciones privadas, eventos corporativos y fiestas.</p>
+            <a href="galeria.html" class="btn-main">Descubre nuestro espacio</a>
+        </div>
+    </header>
+
+    <section class="carousel-section">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="./public/1.jpg" alt="1"></div>
+                <div class="swiper-slide"><img src="./public/2.jpg" alt="2"></div>
+                <div class="swiper-slide"><img src="./public/3.jpg" alt="3"></div>
+                <div class="swiper-slide"><img src="./public/4.jpg" alt="4"></div>
+                <div class="swiper-slide"><img src="./public/5.jpg" alt="5"></div>
+                <div class="swiper-slide"><img src="./public/6.jpg" alt="6"></div>
+                <div class="swiper-slide"><img src="./public/7.jpg" alt="7"></div>
+                <div class="swiper-slide"><img src="./public/8.jpg" alt="8"></div>
+                <div class="swiper-slide"><img src="./public/9.jpg" alt="9"></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <div id="modal-normas" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="playfair">Aviso Importante</h2>
+            <p class="subtitle">Antes de reservar, por favor revisa nuestras normas de convivencia</p>
+            <ul class="normas-list">
+                <li>No se alquila a personas menores de 21 años.</li>
+                <li>El aforo máximo es de 100 personas.</li>
+                <li>La música debe cesar a las 00:00.</li>
+                <li>No se permite pirotecnia o confeti.</li>
+                <li>La reserva se confirma tras el pago del depósito.</li>
+            </ul>
+            <div class="modal-actions">
+                <button onclick="cerrarModal()" class="btn-cancelar">Cancelar</button>
+                <button onclick="irAReserva()" class="btn-aceptar">Aceptar y Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/34614500140" class="btn-float-mobile">Reserva por WhatsApp</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+    tsParticles.load("gold-dust-canvas", {
+        particles: {
+            number: { 
+                value: 400, 
+                density: { enable: true, value_area: 800 } 
+            },
+            color: { value: "#c5a059" }, 
+            shape: { type: "circle" },
+            opacity: {
+                value: 1, 
+                random: true,
+                anim: { 
+                    enable: true, 
+                    speed: 3, 
+                    opacity_min: 0, 
+                    sync: false 
+                }
+            },
+            size: {
+                value: 1.5, // Tamaño de la mota
+                random: { enable: true, minimumValue: 0.5 },
+                anim: { enable: false }
+            },
+            // Resplandor
+            shadow: {
+                enable: true,
+                color: "#D4AF37",
+                blur: 3
+            },
+            move: {
+                enable: true,
+                speed: 1, // Movimiento lento
+                direction: "right", 
+                random: true,
+                straight: false,
+                out_mode: "out",
+                bounce: false,
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: { 
+                    enable: true, 
+                    mode: "bubble" // Las partículas crecen un poco al pasar el ratón
+                },
+                resize: true
+            },
+            modes: {
+                bubble: { distance: 150, size: 3, duration: 2, opacity: 1 }
+            }
+        },
+        retina_detect: true,
+        fullScreen: { enable: false }
+    });
+</script>
+
+   <script>
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        loop: true,
+        autoplay: { delay: 3500, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+        
+        
+        breakpoints: {
+            768: { 
+                slidesPerView: 1.5, 
+                centeredSlides: true,
+                spaceBetween: 20 // 3cm de separación en tablets
+            },
+            1024: { 
+                slidesPerView: 2.5, 
+                centeredSlides: true,
+                spaceBetween: 30 // 5cm de separación en monitores grandes
+            }
+        }
+    });
+</script>
+
+<script>
+        function abrirModal() {
+            document.getElementById('modal-normas').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-normas').style.display = 'none';
+            document.body.style.overflow = 'auto'; 
+        }
+
+        function irAReserva() {
+            window.location.href = "reserva.html";
+        }
+    </script>
+</body>
+</html>
