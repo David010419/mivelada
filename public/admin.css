@@ -1,0 +1,121 @@
+:root {
+    --dorado: #c5a059;
+    --rojo: #e74c3c;
+    --verde: #2ecc71;
+    --mate: #1a1a1a;
+    --gris-fondo: #f4f4f4;
+}
+
+* { box-sizing: border-box; }
+
+body { 
+    background-color: var(--gris-fondo); 
+    color: #333; 
+    margin: 0; 
+    font-family: 'Montserrat', sans-serif; 
+}
+
+.admin-container { 
+    padding: 100px 5% 50px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+/* Estadísticas Responsivas */
+.stats-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 15px; 
+    margin-bottom: 30px; 
+}
+
+.stat-card { 
+    background: var(--mate); 
+    color: white; 
+    padding: 20px; 
+    border-radius: 8px; 
+    text-align: center; 
+    border-bottom: 4px solid var(--dorado); 
+}
+
+.stat-card h3 { 
+    color: var(--dorado); 
+    font-size: 1.8rem; 
+    margin: 5px 0 0; 
+    font-family: 'Playfair Display', serif; 
+}
+
+/* Contenedor de Tabla */
+.table-container { 
+    background: white; 
+    border-radius: 8px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+    overflow: hidden; 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+th, td { 
+    padding: 15px; 
+    text-align: left; 
+    border-bottom: 1px solid #eee; 
+}
+
+th { 
+    background: #fafafa; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    color: #999; 
+}
+
+/* Estilos de Móvil (Efecto Tarjeta) */
+@media (max-width: 768px) {
+    .admin-container { padding-top: 80px; }
+    
+    .navbar .logo span { display: none; } /* Oculta texto logo en móvil */
+
+    /* Convertimos la tabla en bloques */
+    thead { display: none; } /* Escondemos cabecera */
+    
+    tr { 
+        display: block; 
+        border: 1px solid var(--dorado); 
+        margin-bottom: 15px; 
+        border-radius: 8px;
+        padding: 10px;
+        background: #fff;
+    }
+
+    td { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 5px;
+        font-size: 0.9rem;
+    }
+
+    td::before { 
+        content: attr(data-label); 
+        font-weight: bold; 
+        color: #999; 
+        font-size: 0.7rem;
+        text-transform: uppercase;
+    }
+
+    .actions { width: 100%; justify-content: center; margin-top: 10px; }
+}
+
+/* Botones y Pills */
+.status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: bold; }
+.status-pendiente { background: #fff3cd; color: #856404; }
+.status-confirmada { background: #d4edda; color: #155724; }
+.status-cancelada { background: #f8d7da; color: #721c24; }
+
+.actions { display: flex; gap: 8px; }
+.btn-action { border: none; padding: 8px 12px; border-radius: 4px; color: white; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
+.btn-confirm { background: var(--verde); }
+.btn-cancel { background: var(--rojo); }

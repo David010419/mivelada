@@ -2,156 +2,86 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control | Mi Velada</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panel Admin | Mi Velada</title>
+    <link rel="stylesheet" href="admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script>
-        if (!localStorage.getItem('adminToken')) {
-            window.location.href = 'login.html';
-        }
+        if (!localStorage.getItem('adminToken')) { window.location.href = 'login.html'; }
     </script>
-
-    <style>
-        :root { --dorado: #c5a059; --rojo: #e74c3c; --verde: #2ecc71; --mate: #1a1a1a; }
-        
-        body { background-color: #f4f4f4; color: #333; }
-
-        .admin-container { padding: 120px 5% 50px; max-width: 1200px; margin: 0 auto; }
-        
-        /* Estadísticas */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--mate); color: white; padding: 30px; border-radius: 8px; text-align: center; border-bottom: 4px solid var(--dorado); }
-        .stat-card p { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 10px; }
-        .stat-card h3 { color: var(--dorado); font-size: 2.5rem; font-family: 'Playfair Display', serif; margin: 0; }
-
-        /* Tabla */
-        .table-container { background: white; border-radius: 8px; overflow-x: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th, td { padding: 20px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #fafafa; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #999; }
-        
-        /* Estados */
-        .status-pill { padding: 6px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
-        .status-pendiente { background: #fff3cd; color: #856404; }
-        .status-confirmada { background: #d4edda; color: #155724; }
-        .status-cancelada { background: #f8d7da; color: #721c24; }
-
-        /* Acciones */
-        .actions { display: flex; gap: 10px; }
-        .btn-action { border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; transition: 0.3s; color: white; }
-        .btn-confirm { background-color: var(--verde); }
-        .btn-cancel { background-color: var(--rojo); }
-        .btn-action:hover { opacity: 0.8; transform: translateY(-2px); }
-        
-        .turno-tag { font-size: 0.7rem; background: #f0f0f0; padding: 3px 8px; border-radius: 4px; margin-left: 8px; color: #666; font-weight: bold; }
-    </style>
 </head>
 <body>
 
-    <nav class="navbar dark-nav" style="background: #000; padding: 10px 5%; position: fixed; top: 0; width: 100%; z-index: 1000;">
+    <nav class="navbar" style="background: #000; padding: 10px 5%; position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center;">
         <div class="logo" style="display: flex; align-items: center;">
-            <img src="logo.png" alt="Logo" style="height: 50px;">
-            <span style="color: var(--dorado); font-weight: bold; margin-left: 15px; letter-spacing: 2px;">PANEL ADMIN</span>
+            <img src="logo.png" alt="Logo" style="height: 40px;">
+            <span style="color: #c5a059; font-weight: bold; margin-left: 10px; letter-spacing: 1px;">ADMIN</span>
         </div>
-        <button onclick="cerrarSesion()" class="btn-main" style="font-size: 0.75rem; padding: 10px 20px; cursor: pointer; border: none;">Cerrar Sesión</button>
+        <button onclick="cerrarSesion()" style="background: #c5a059; border: none; padding: 8px 15px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; cursor: pointer;">SALIR</button>
     </nav>
 
     <main class="admin-container">
-        <h1 class="playfair" style="margin-bottom: 10px;">Gestión de Reservas</h1>
-        <p style="color: #666; margin-bottom: 40px;">Bienvenido al panel de control de Mi Velada.</p>
+        <h1 style="font-family: 'Playfair Display', serif; margin-bottom: 5px;">Reservas</h1>
+        <p style="color: #888; margin-bottom: 30px; font-size: 0.9rem;">Gestión del calendario de eventos.</p>
         
         <div class="stats-grid">
-            <div class="stat-card">
-                <p>Total Reservas</p>
-                <h3 id="total-reservas">0</h3>
-            </div>
-            <div class="stat-card">
-                <p>Ingresos Previstos</p>
-                <h3 id="ingresos-totales">0€</h3>
-            </div>
-            <div class="stat-card">
-                <p>Ticket Medio</p>
-                <h3 id="ticket-medio">0€</h3>
-            </div>
+            <div class="stat-card"><p>TOTAL</p><h3 id="total-reservas">0</h3></div>
+            <div class="stat-card"><p>INGRESOS</p><h3 id="ingresos-totales">0€</h3></div>
+            <div class="stat-card"><p>PROMEDIO</p><h3 id="ticket-medio">0€</h3></div>
         </div>
 
         <div class="table-container">
             <table id="tabla-reservas">
                 <thead>
                     <tr>
-                        <th>Fecha y Turno</th>
+                        <th>Fecha</th>
                         <th>Cliente</th>
-                        <th>Email / Contacto</th>
+                        <th>Email</th>
                         <th>Total</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </main>
 
     <script>
-        function cerrarSesion() {
-            localStorage.removeItem('adminToken');
-            window.location.href = 'login.html';
-        }
+        function cerrarSesion() { localStorage.removeItem('adminToken'); window.location.href = 'login.html'; }
 
         async function cargarInformes() {
             const token = localStorage.getItem('adminToken');
-            
             try {
-                const res = await fetch('/api/admin/informes', {
-                    headers: { 'x-auth-token': token }
-                });
-
-                // SEGURIDAD: Comprobamos el estado ANTES de procesar los datos
-                if (res.status === 401 || res.status === 400) {
-                    cerrarSesion();
-                    return;
-                }
-
+                const res = await fetch('/api/admin/informes', { headers: { 'x-auth-token': token } });
+                if (!res.ok) return cerrarSesion();
                 const reservas = await res.json();
                 actualizarInterfaz(reservas);
-
-            } catch (error) {
-                console.error("Error al cargar informes:", error);
-                alert("Error al conectar con el servidor.");
-            }
+            } catch (error) { console.error(error); }
         }
 
         function actualizarInterfaz(reservas) {
-            let ingresos = 0;
-            let reservasValidas = 0;
+            let ingresos = 0, validas = 0;
             const tbody = document.querySelector('#tabla-reservas tbody');
             tbody.innerHTML = ''; 
 
-            reservas.reverse().forEach(r => {
-                if (r.estado !== 'Cancelada') {
-                    ingresos += r.total;
-                    reservasValidas++;
-                }
-
+            reservas.forEach(r => {
+                if (r.estado !== 'Cancelada') { ingresos += r.total; validas++; }
                 const statusClass = r.estado ? r.estado.toLowerCase() : 'pendiente';
                 
+                // NOTA: El data-label es lo que permite el diseño móvil
                 const fila = `
                     <tr>
-                        <td>
-                            <strong>${r.fecha}</strong>
-                            <span class="turno-tag">${r.turno}</span>
-                        </td>
-                        <td style="font-weight: 500;">${r.nombreCliente}</td>
-                        <td><small style="color: #777;">${r.email}</small></td>
-                        <td><strong style="color: var(--mate);">${r.total}€</strong></td>
-                        <td><span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span></td>
-                        <td>
+                        <td data-label="FECHA"><strong>${r.fecha}</strong> <small>${r.turno}</small></td>
+                        <td data-label="CLIENTE">${r.nombreCliente}</td>
+                        <td data-label="EMAIL">${r.email}</td>
+                        <td data-label="TOTAL"><strong>${r.total}€</strong></td>
+                        <td data-label="ESTADO"><span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span></td>
+                        <td data-label="GESTIÓN">
                             <div class="actions">
-                                <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">Confirmar</button>
-                                <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">Cancelar</button>
+                                <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">✓</button>
+                                <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">✕</button>
                             </div>
                         </td>
                     </tr>
@@ -161,31 +91,17 @@
 
             document.getElementById('total-reservas').innerText = reservas.length;
             document.getElementById('ingresos-totales').innerText = ingresos + "€";
-            document.getElementById('ticket-medio').innerText = reservasValidas > 0 ? Math.round(ingresos / reservasValidas) + "€" : "0€";
+            document.getElementById('ticket-medio').innerText = validas > 0 ? Math.round(ingresos / validas) + "€" : "0€";
         }
 
         async function cambiarEstado(id, nuevoEstado) {
-            if(!confirm(`¿Deseas marcar esta reserva como ${nuevoEstado}?`)) return;
-
-            try {
-                const res = await fetch(`/api/reservas/${id}`, {
-                    method: 'PATCH',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'x-auth-token': localStorage.getItem('adminToken')
-                    },
-                    body: JSON.stringify({ estado: nuevoEstado })
-                });
-
-                if(res.ok) {
-                    cargarInformes();
-                } else {
-                    alert("No tienes permisos o la sesión ha caducado.");
-                    cerrarSesion();
-                }
-            } catch (error) {
-                alert("Error de conexión con el servidor.");
-            }
+            if(!confirm(`¿Marcar como ${nuevoEstado}?`)) return;
+            const res = await fetch(`/api/reservas/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'x-auth-token': localStorage.getItem('adminToken') },
+                body: JSON.stringify({ estado: nuevoEstado })
+            });
+            if(res.ok) cargarInformes();
         }
 
         window.onload = cargarInformes;
