@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reserva Premium | Mi Velada</title>
+    <title>Reserva | Mi Velada</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -161,7 +161,7 @@
     <main class="booking-page">
         <div class="container-small">
             <h1 class="playfair">Reserva Tu Velada</h1>
-            <p class="subtitle">Cada detalle cuenta para crear una noche perfecta</p>
+            <p class="subtitle">Cada detalle cuenta para crear una velada perfecta con los tuyos</p>
 
             <form id="booking-form">
                 
@@ -170,18 +170,18 @@
                     <div class="input-grid">
                         <div class="field-group">
                             <span class="field-label">Nombre</span>
-                            <input type="text" id="nombre" class="input-field" placeholder="Nombre" required>
+                            <input type="text" id="nombre" class="input-field" placeholder="" required>
                         </div>
                         <div class="field-group">
                             <span class="field-label">Apellidos</span>
-                            <input type="text" id="apellidos" class="input-field" placeholder="Apellidos" required>
+                            <input type="text" id="apellidos" class="input-field" placeholder="" required>
                         </div>
                     </div>
 
                     <div class="input-grid">
                         <div class="field-group">
                             <span class="field-label">Teléfono de contacto</span>
-                            <input type="tel" id="telefono" class="input-field" placeholder="600 000 000" required>
+                            <input type="tel" id="telefono" class="input-field" placeholder="" required>
                         </div>
                         <div class="field-group">
                             <span class="field-label">Fecha de nacimiento</span>
@@ -191,7 +191,7 @@
                     
                     <div class="field-group" style="margin-top: 15px;">
                         <span class="field-label">Correo electrónico</span>
-                        <input type="email" id="email" class="input-field" placeholder="ejemplo@correo.com" required>
+                        <input type="email" id="email" class="input-field" placeholder="" required>
                     </div>
                 </div>
 
@@ -214,13 +214,13 @@
                             <input type="radio" name="turno" value="Noche" id="shift-night" disabled>
                             <i class="fas fa-moon"></i>
                             <h3>Turno Noche</h3>
-                            <span>19:00h - 02:00h <b>(+200€)</b></span>
+                            <span>19:00h - 02:00h <b>(+100€)</b></span>
                         </label>
                         <label class="option-card">
                             <input type="radio" name="turno" value="Día Completo" id="shift-full" disabled>
                             <i class="fas fa-clock"></i>
                             <h3>Día Completo</h3>
-                            <span>10:00h - 02:00h <b>(+600€)</b></span>
+                            <span>10:00h - 02:00h <b>(+200€)</b></span>
                         </label>
                     </div>
                 </div>
@@ -229,22 +229,22 @@
                     <label class="section-label">4. Servicios Adicionales</label>
                     <div class="cards-grid">
                         <label class="option-card">
-                            <input type="checkbox" class="addon" data-price="150" value="Limpieza">
+                            <input type="checkbox" class="addon" data-price="25" value="Limpieza">
                             <i class="fas fa-hand-sparkles"></i>
                             <h3>Limpieza</h3>
-                            <span>+150€</span>
+                            <span>+25€</span>
                         </label>
                         <label class="option-card">
-                            <input type="checkbox" class="addon" data-price="300" value="Sonido">
+                            <input type="checkbox" class="addon" data-price="100" value="Sonido">
                             <i class="fas fa-music"></i>
                             <h3>Sonido Pro</h3>
-                            <span>+300€</span>
+                            <span>+100€</span>
                         </label>
                         <label class="option-card">
-                            <input type="checkbox" class="addon" data-price="500" value="Catering">
+                            <input type="checkbox" class="addon" data-price="200" value="Catering">
                             <i class="fas fa-utensils"></i>
                             <h3>Catering</h3>
-                            <span>Desde +500€</span>
+                            <span>+200€</span>
                         </label>
                     </div>
                 </div>
@@ -277,7 +277,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
     <script>
-        const PRECIO_DIARIO = 800, PRECIO_FINDE = 1200, PLUS_NOCHE = 200, PLUS_COMPLETO = 600;
+        const PRECIO_DIARIO = 200, PRECIO_FINDE = 300, PLUS_NOCHE = 100, PLUS_COMPLETO = 200;
         let precioBaseDia = 0, precioTurnoExtra = 0, precioAddons = 0, mapaDisponibilidad = {}, calendarInstance;
         let descuentoMonto = 0, codigoCuponValido = "";
 

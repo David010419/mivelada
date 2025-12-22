@@ -161,3 +161,101 @@ button {
     margin-top: 10px;
     border-radius: 5px;
 }
+/* login.css */
+:root {
+    --dorado: #c5a059;
+    --mate: #0f0f0f;
+    --mate-suave: #1a1a1a;
+    --blanco: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--mate);
+    background-image: radial-gradient(circle at center, #1e1e1e 0%, #0f0f0f 100%);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-container {
+    background: var(--mate-suave);
+    padding: 40px;
+    border-radius: 15px;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-container img {
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.login-container h2 {
+    color: var(--dorado);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    color: #888;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 15px;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.login-container input:focus {
+    border-color: var(--dorado);
+    outline: none;
+    background: #2a2a2a;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background: var(--dorado);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    background: #b08d4a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
