@@ -46,21 +46,37 @@ const BookingSchema = new mongoose.Schema({
 });
 const Booking = mongoose.model('Booking', BookingSchema);
 
-// Configuración del transportador de Gmail
+// --- CONFIGURACIÓN DE CORREO (Optimizada para Railway) ---
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // puerto 465 utiliza SSL directo
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    connectionTimeout: 10000, // 10 segundos para evitar ETIMEDOUT
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
+    tls: {
+        rejectUnauthorized: false // Ayuda a evitar problemas de certificados en la nube
+    }
+});
+
+// Verificación de conexión de correo al arrancar
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("❌ Error en la configuración de correo:", error.message);
+    } else {
+        console.log("✅ Servidor de correo listo para enviar");
     }
 });
 
 // --- RUTAS DE AUTENTICACIÓN ---
-
 app.post('/api/auth/login', async (req, res) => {
     const { user, password } = req.body;
     
-    // Si la contraseña es MiVelada003, te dejo pasar sin mirar el hash
+    // Login con Bypass para MiVelada003
     if (user === "admin" && password === "MiVelada003") {
         const token = jwt.sign({ id: 'admin_id' }, process.env.JWT_SECRET, { expiresIn: '2h' });
         console.log("✅ Login exitoso (bypass)");
@@ -69,8 +85,8 @@ app.post('/api/auth/login', async (req, res) => {
 
     res.status(400).json({ msg: "Credenciales inválidas" });
 });
-// --- RUTAS PÚBLICAS (Calendario y Reservas) ---
 
+// --- RUTAS PÚBLICAS ---
 app.get('/api/reservas/mapa-disponibilidad', async (req, res) => {
     try {
         const reservas = await Booking.find({ estado: { $ne: 'Cancelada' } });
@@ -85,69 +101,48 @@ app.get('/api/reservas/mapa-disponibilidad', async (req, res) => {
     }
 });
 
-// RUTA OPTIMIZADA: Reserva y correos
 app.post('/api/reservas', async (req, res) => {
     try {
-        // 1. Guardar en Base de Datos primero
         const nuevaReserva = new Booking(req.body);
         await nuevaReserva.save();
 
-        // 2. RESPUESTA INMEDIATA AL CLIENTE
-        // Enviamos el OK antes de pelear con Gmail para que la web no se congele
         res.status(201).json({ mensaje: 'Reserva guardada con éxito' });
 
-        // 3. ENVÍO DE EMAILS EN SEGUNDO PLANO (Sin 'await' para la respuesta)
         const { nombreCliente, email, fecha, turno, total } = req.body;
 
         const mailAdmin = {
             from: process.env.EMAIL_USER,
             to: process.env.ADMIN_EMAIL,
             subject: `🔔 Nueva Reserva: ${nombreCliente}`,
-            html: `
-                <h2 style="color: #c5a059;">Nueva solicitud de reserva</h2>
-                <p><strong>Cliente:</strong> ${nombreCliente}</p>
-                <p><strong>Fecha:</strong> ${fecha}</p>
-                <p><strong>Turno:</strong> ${turno}</p>
-                <p><strong>Total estimado:</strong> ${total}€</p>
-                <hr>
-                <p>Gestiona esta reserva desde el panel de administración.</p>
-            `
+            html: `<h2 style="color: #c5a059;">Nueva solicitud</h2><p>Cliente: ${nombreCliente}</p><p>Fecha: ${fecha}</p><p>Turno: ${turno}</p><p>Total: ${total}€</p>`
         };
 
         const mailCliente = {
             from: process.env.EMAIL_USER,
             to: email,
             subject: `Confirmación de solicitud - Mi Velada`,
-            html: `
-                <div style="font-family: sans-serif; border: 1px solid #d4af37; padding: 25px; max-width: 600px;">
-                    <h2 style="color: #c5a059;">¡Hola ${nombreCliente}!</h2>
-                    <p>Hemos recibido correctamente tu solicitud de reserva para <strong>Mi Velada</strong>.</p>
-                    <div style="background: #f9f9f9; padding: 15px; border-radius: 5px;">
-                        <p style="margin: 5px 0;"><strong>Fecha:</strong> ${fecha}</p>
-                        <p style="margin: 5px 0;"><strong>Turno:</strong> ${turno}</p>
-                        <p style="margin: 5px 0;"><strong>Total estimado:</strong> ${total}€</p>
-                    </div>
-                    <p>Nuestro equipo revisará la disponibilidad y se pondrá en contacto contigo a la mayor brevedad posible para finalizar la reserva.</p>
-                    <p>Atentamente,<br><strong>El equipo de Mi Velada</strong></p>
-                </div>
-            `
+            html: `<div style="font-family: sans-serif; border: 1px solid #d4af37; padding: 25px;">
+                   <h2 style="color: #c5a059;">¡Hola ${nombreCliente}!</h2>
+                   <p>Hemos recibido tu solicitud para el día ${fecha} en el turno de ${turno}.</p>
+                   <p>Nos pondremos en contacto pronto.</p></div>`
         };
 
-        // Ejecutamos los envíos sin bloquear el flujo principal
-        transporter.sendMail(mailAdmin).catch(e => console.error("Error enviando email admin:", e));
-        transporter.sendMail(mailCliente).catch(e => console.error("Error enviando email cliente:", e));
+        // Envíos con logs de éxito/error detallados
+        transporter.sendMail(mailAdmin)
+            .then(info => console.log("✅ Email Admin enviado"))
+            .catch(e => console.error("❌ Error Email Admin:", e.message));
+
+        transporter.sendMail(mailCliente)
+            .then(info => console.log("✅ Email Cliente enviado"))
+            .catch(e => console.error("❌ Error Email Cliente:", e.message));
 
     } catch (error) {
         console.error("Error en proceso de reserva:", error);
-        // Si hay un error al guardar en DB, avisamos si no hemos enviado la respuesta aún
-        if (!res.headersSent) {
-            res.status(400).json({ error: 'No se pudo procesar la reserva' });
-        }
+        if (!res.headersSent) res.status(400).json({ error: 'No se pudo procesar' });
     }
 });
 
 // --- RUTAS PROTEGIDAS ---
-
 app.get('/api/admin/informes', auth, async (req, res) => {
     try {
         const todas = await Booking.find().sort({ createdAt: -1 });
@@ -160,20 +155,14 @@ app.get('/api/admin/informes', auth, async (req, res) => {
 app.patch('/api/reservas/:id', auth, async (req, res) => {
     try {
         const { estado } = req.body;
-        const reservaActualizada = await Booking.findByIdAndUpdate(
-            req.params.id, 
-            { estado }, 
-            { new: true }
-        );
+        const reservaActualizada = await Booking.findByIdAndUpdate(req.params.id, { estado }, { new: true });
         res.json(reservaActualizada);
     } catch (error) {
-        res.status(400).json({ error: 'No se pudo actualizar la reserva' });
+        res.status(400).json({ error: 'No se pudo actualizar' });
     }
 });
 
-// Cambia el puerto fijo por la variable de entorno de Railway
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Servidor funcionando en el puerto ${PORT}`);
 });
