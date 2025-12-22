@@ -71,34 +71,38 @@
         const statusClass = r.estado ? r.estado.toLowerCase() : 'pendiente';
         
         const fila = `
-            <tr>
-                <td data-label="FECHA"><strong>${r.fecha}</strong> <small>${r.turno}</small></td>
-                <td data-label="CLIENTE">
-                    ${r.nombre} ${r.apellidos || ''}<br>
-                    <small style="color:var(--dorado)">${r.fechaNacimiento || 'N/A'}</small>
-                </td>
-                <td data-label="CONTACTO">
-                    ${r.email}<br>
-                    <a href="https://wa.me/${r.telefono}" target="_blank" style="color:#25d366; text-decoration:none;">
-                        <i class="fab fa-whatsapp"></i> ${r.telefono || 'Sin tel.'}
-                    </a>
-                </td>
-                <td data-label="TOTAL">
-            <strong>${r.total}€</strong>
-            ${r.descuentoAplicado > 0 ? 
-                `<br><small style="color: #2ecc71;">Dto: -${r.descuentoAplicado}€ (${r.cupónCodigo})</small>` : 
-                ''
-            }
+    <tr>
+        <td data-label="FECHA">
+            <div><strong>${r.fecha}</strong><br><small>${r.turno}</small></div>
         </td>
-                <td data-label="ESTADO"><span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span></td>
-                <td data-label="GESTIÓN">
-                    <div class="actions">
-                        <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">✓</button>
-                        <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">✕</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        <td data-label="CLIENTE">
+            <div><strong>${r.nombre} ${r.apellidos}</strong><br><small style="color:#888">${r.fechaNacimiento}</small></div>
+        </td>
+        <td data-label="CONTACTO">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <span style="font-size: 0.8rem; color: #bbb;">${r.email}</span>
+                <a href="https://wa.me/${r.telefono}" target="_blank" style="color:var(--verde); text-decoration:none; font-weight: bold; margin-top: 5px;">
+                    <i class="fab fa-whatsapp"></i> ${r.telefono}
+                </a>
+            </div>
+        </td>
+        <td data-label="TOTAL">
+            <div>
+                <strong>${r.total}€</strong>
+                ${r.descuentoAplicado > 0 ? `<br><small style="color:var(--verde)">Dto: -${r.descuentoAplicado}€ (${r.cupónCodigo})</small>` : ''}
+            </div>
+        </td>
+        <td data-label="ESTADO">
+            <span class="status-pill status-${statusClass}">${r.estado || 'Pendiente'}</span>
+        </td>
+        <td data-label="ACCIONES">
+            <div class="actions">
+                <button onclick="cambiarEstado('${r._id}', 'Confirmada')" class="btn-action btn-confirm">✓</button>
+                <button onclick="cambiarEstado('${r._id}', 'Cancelada')" class="btn-action btn-cancel">✕</button>
+            </div>
+        </td>
+    </tr>
+`;
         tbody.innerHTML += fila;
     });
 

@@ -130,7 +130,7 @@ th {
 }
 
 body {
-    background-color: var(--mate);
+    background-color: #313131;
     color: #e0e0e0;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
@@ -218,47 +218,57 @@ td {
 .status-confirmada { background: rgba(46, 204, 113, 0.1); color: var(--verde); border: 1px solid var(--verde); }
 .status-cancelada { background: rgba(231, 76, 60, 0.1); color: var(--rojo); border: 1px solid var(--rojo); }
 
-/* --- RESPONSIVE: MODO TARJETAS --- */
+
+/* --- RESPONSIVE: MODO TARJETAS (CORREGIDO PARA EMAILS LARGOS) --- */
 @media (max-width: 900px) {
     table, thead, tbody, th, td, tr { 
         display: block; 
     }
 
-    thead { display: none; } /* Ocultar cabecera en móvil */
+    thead { display: none; } 
 
     tr {
-        margin-bottom: 20px;
-        background: #1a1a1a;
+        margin-bottom: 25px;
+        background: var(--mate-suave);
         border: 1px solid #333;
         border-radius: 12px;
-        padding: 10px;
+        padding: 15px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
     td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: right;
-        padding: 12px 10px;
+        display: grid;
+        grid-template-columns: 100px 1fr; /* 100px fijos para la etiqueta, el resto para el valor */
+        gap: 10px;
+        align-items: start; /* Alinea al principio por si el texto tiene varias líneas */
+        padding: 12px 5px;
         border-bottom: 1px solid #252525;
+        word-break: break-word; /* FUERZA A QUE EL EMAIL ROMPA LÍNEA SI ES MUY LARGO */
     }
 
     td:last-child { border-bottom: none; }
 
-    /* Añadimos los nombres de los campos antes del valor */
     td::before {
         content: attr(data-label);
         font-weight: 700;
         color: var(--dorado);
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         text-transform: uppercase;
-        margin-right: 15px;
+        letter-spacing: 1px;
         text-align: left;
     }
 
+    /* Ajuste para que el valor de la celda no se pegue a la izquierda */
+    td > * {
+        text-align: right; 
+        word-break: break-all; /* Específico para emails como: david.muy.largo.de.ejemplo@gmail.com */
+    }
+
     .actions {
+        display: flex;
         justify-content: flex-end;
         width: 100%;
+        margin-top: 10px;
     }
 }
 
