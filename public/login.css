@@ -109,3 +109,55 @@ body {
 .back-link:hover {
     color: var(--dorado);
 }
+/* Centrado absoluto de la caja de login */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;     /* Centrado vertical */
+    min-height: 100vh;       /* Altura de toda la pantalla */
+    background-color: #1a1a1a;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.login-container {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    width: 90%;             /* En móviles ocupa casi todo el ancho */
+    max-width: 350px;       /* En PC no se estira demasiado */
+    box-sizing: border-box; /* IMPORTANTE: evita que el padding empuje la caja a la derecha */
+    border: 1px solid #d4af37;
+}
+
+.login-container h2 {
+    color: #d4af37;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #333;
+    color: white;
+    box-sizing: border-box; /* Mantiene el input dentro de la caja */
+    font-size: 16px;        /* Evita que el iPhone haga zoom automático al escribir */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #d4af37;
+    border: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
