@@ -59,34 +59,15 @@ const transporter = nodemailer.createTransport({
 
 app.post('/api/auth/login', async (req, res) => {
     const { user, password } = req.body;
-    console.log(`Attempting login for user: ${user}`); // Log de depuración
-
-    if (user !== "admin") {
-        console.log("❌ Usuario incorrecto");
-        return res.status(400).json({ msg: "Usuario incorrecto" });
-    }
-
-    try {
-        const hash = process.env.ADMIN_HASHED_PASS;
-        if (!hash) {
-            console.error("❌ ERROR: La variable ADMIN_HASHED_PASS no está definida en Railway");
-            return res.status(500).json({ msg: "Error de configuración en el servidor" });
-        }
-
-        const isMatch = await bcrypt.compare(password, hash);
-        
-        if (!isMatch) {
-            console.log("❌ Contraseña incorrecta");
-            return res.status(400).json({ msg: "Contraseña incorrecta" });
-        }
-
+    
+    // Si la contraseña es MiVelada003, te dejo pasar sin mirar el hash
+    if (user === "admin" && password === "MiVelada003") {
         const token = jwt.sign({ id: 'admin_id' }, process.env.JWT_SECRET, { expiresIn: '2h' });
-        console.log("✅ Login exitoso para admin");
-        res.json({ token });
-    } catch (error) {
-        console.error("❌ Error interno:", error.message);
-        res.status(500).json({ msg: "Error en el proceso de login" });
+        console.log("✅ Login exitoso (bypass)");
+        return res.json({ token });
     }
+
+    res.status(400).json({ msg: "Credenciales inválidas" });
 });
 // --- RUTAS PÚBLICAS (Calendario y Reservas) ---
 
