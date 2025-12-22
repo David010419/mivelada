@@ -46,29 +46,31 @@ const BookingSchema = new mongoose.Schema({
 });
 const Booking = mongoose.model('Booking', BookingSchema);
 
-// --- CONFIGURACIÓN DE CORREO (Optimizada para Railway) ---
+// --- CONFIGURACIÓN DE CORREO (Intento con Puerto 587) ---
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true, // puerto 465 utiliza SSL directo
+    port: 587,
+    secure: false, // false para puerto 587
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 10000, // 10 segundos para evitar ETIMEDOUT
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
     tls: {
-        rejectUnauthorized: false // Ayuda a evitar problemas de certificados en la nube
-    }
+        // Configuraciones para evitar bloqueos en redes de nube
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false
+    },
+    connectionTimeout: 20000, // 20 segundos
+    greetingTimeout: 20000,
+    socketTimeout: 20000
 });
 
 // Verificación de conexión de correo al arrancar
 transporter.verify((error, success) => {
     if (error) {
-        console.error("❌ Error en la configuración de correo:", error.message);
+        console.error("❌ Gmail sigue bloqueado en puerto 587:", error.message);
     } else {
-        console.log("✅ Servidor de correo listo para enviar");
+        console.log("✅ ¡CONECTADO! El servidor de correo está listo (Puerto 587)");
     }
 });
 
@@ -114,7 +116,11 @@ app.post('/api/reservas', async (req, res) => {
             from: process.env.EMAIL_USER,
             to: process.env.ADMIN_EMAIL,
             subject: `🔔 Nueva Reserva: ${nombreCliente}`,
-            html: `<h2 style="color: #c5a059;">Nueva solicitud</h2><p>Cliente: ${nombreCliente}</p><p>Fecha: ${fecha}</p><p>Turno: ${turno}</p><p>Total: ${total}€</p>`
+            html: `<h2 style="color: #c5a059;">Nueva solicitud</h2>
+                   <p><strong>Cliente:</strong> ${nombreCliente}</p>
+                   <p><strong>Fecha:</strong> ${fecha}</p>
+                   <p><strong>Turno:</strong> ${turno}</p>
+                   <p><strong>Total:</strong> ${total}€</p>`
         };
 
         const mailCliente = {
@@ -123,22 +129,23 @@ app.post('/api/reservas', async (req, res) => {
             subject: `Confirmación de solicitud - Mi Velada`,
             html: `<div style="font-family: sans-serif; border: 1px solid #d4af37; padding: 25px;">
                    <h2 style="color: #c5a059;">¡Hola ${nombreCliente}!</h2>
-                   <p>Hemos recibido tu solicitud para el día ${fecha} en el turno de ${turno}.</p>
-                   <p>Nos pondremos en contacto pronto.</p></div>`
+                   <p>Hemos recibido tu solicitud para el día <strong>${fecha}</strong> en el turno de <strong>${turno}</strong>.</p>
+                   <p>Nos pondremos en contacto contigo lo antes posible para confirmar los detalles.</p>
+                   <p>Atentamente,<br>El equipo de Mi Velada</p></div>`
         };
 
         // Envíos con logs de éxito/error detallados
         transporter.sendMail(mailAdmin)
-            .then(info => console.log("✅ Email Admin enviado"))
+            .then(info => console.log("✅ Email Admin enviado correctamente"))
             .catch(e => console.error("❌ Error Email Admin:", e.message));
 
         transporter.sendMail(mailCliente)
-            .then(info => console.log("✅ Email Cliente enviado"))
+            .then(info => console.log("✅ Email Cliente enviado correctamente"))
             .catch(e => console.error("❌ Error Email Cliente:", e.message));
 
     } catch (error) {
         console.error("Error en proceso de reserva:", error);
-        if (!res.headersSent) res.status(400).json({ error: 'No se pudo procesar' });
+        if (!res.headersSent) res.status(400).json({ error: 'No se pudo procesar la reserva' });
     }
 });
 
@@ -158,7 +165,7 @@ app.patch('/api/reservas/:id', auth, async (req, res) => {
         const reservaActualizada = await Booking.findByIdAndUpdate(req.params.id, { estado }, { new: true });
         res.json(reservaActualizada);
     } catch (error) {
-        res.status(400).json({ error: 'No se pudo actualizar' });
+        res.status(400).json({ error: 'No se pudo actualizar la reserva' });
     }
 });
 
